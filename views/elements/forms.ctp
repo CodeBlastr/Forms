@@ -35,7 +35,7 @@ $groups = $this->requestAction('/forms/forms/display/'.$id);
 if (strpos($id, 'view') > -1) {
 	
 	#get the model from the controller
-	$model = Inflector::classify($this->params['controller']);
+	$model = Inflector::classify($this->request->params['controller']);
 	
 	foreach ($groups['FormFieldset'] as $fieldset) {  
 		echo (!empty($fieldset['legend']) ? '<h4>'.$fieldset['legend'].'</h4>' : ''); ?>

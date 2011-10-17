@@ -61,18 +61,18 @@ if (strpos($id, 'view') > -1) {
 	
 		
 # initialize the form open tag
-echo $form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method']));
-/*echo $form->create($groups['Form']['model'], array(
+echo $this->Form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method']));
+/*echo $this->Form->create($groups['Form']['model'], array(
 				'url' => $groups['Form']['url'],
 				'method' => $groups['Form']['method'],
 				));*/
-echo $form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin'])); 
-echo $form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model'])); 
-echo $form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action'])); 
-echo $form->input('Form.success_message', array('type' => 'hidden', 'value' => $groups['Form']['success_message'])); 
-echo $form->input('Form.success_url', array('type' => 'hidden', 'value' => $groups['Form']['success_url'])); 
-echo $form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message'])); 
-echo $form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url'])); 
+echo $this->Form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin'])); 
+echo $this->Form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model'])); 
+echo $this->Form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action'])); 
+echo $this->Form->input('Form.success_message', array('type' => 'hidden', 'value' => $groups['Form']['success_message'])); 
+echo $this->Form->input('Form.success_url', array('type' => 'hidden', 'value' => $groups['Form']['success_url'])); 
+echo $this->Form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message'])); 
+echo $this->Form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url'])); 
 
 foreach ($groups['FormFieldset'] as $fieldset) {  
 ?>
@@ -96,7 +96,7 @@ foreach ($groups['FormFieldset'] as $fieldset) {
 		} else {
 			$defaultValue = $input['default_value'];
 		}
-		echo $form->input($model.'.'.$input['code'], array(
+		echo $this->Form->input($model.'.'.$input['code'], array(
 				'type' => $input['input_type'],
 				'label' => $input['name'],
 				'default' => $defaultValue,
@@ -126,7 +126,7 @@ foreach ($groups['FormFieldset'] as $fieldset) {
   <?php
 }
 #close the form and show the submit button
-echo $form->end('Submit');
+echo $this->Form->end('Submit');
 	
 	
 	
@@ -146,18 +146,18 @@ echo $form->end('Submit');
 	$this->Session->delete('User.password');
 	$this->Session->delete('User.confirm_password');
 	# set the form variables in the case of an error
-	$form->data = $this->Session->read();
-	$form->validationErrors = $this->Session->read('errors');
+	$this->Form->data = $this->Session->read();
+	$this->Form->validationErrors = $this->Session->read('errors');
 		
 	# initialize the form open tag
-	echo $form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method'], 'id' => 'addForm'));
-	echo $form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin'])); 
-	echo $form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model'])); 
-	echo $form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action'])); 
-	echo $form->input('Form.success_message', array('type' => 'hidden', 'value' => $groups['Form']['success_message'])); 
-	echo $form->input('Form.success_url', array('type' => 'hidden', 'value' => $groups['Form']['success_url'])); 
-	echo $form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message'])); 
-	echo $form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url'])); 
+	echo $this->Form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method'], 'id' => 'addForm'));
+	echo $this->Form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin'])); 
+	echo $this->Form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model'])); 
+	echo $this->Form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action'])); 
+	echo $this->Form->input('Form.success_message', array('type' => 'hidden', 'value' => $groups['Form']['success_message'])); 
+	echo $this->Form->input('Form.success_url', array('type' => 'hidden', 'value' => $groups['Form']['success_url'])); 
+	echo $this->Form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message'])); 
+	echo $this->Form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url'])); 
 	
 	foreach ($groups['FormFieldset'] as $fieldset) {  
 	?>
@@ -214,14 +214,14 @@ echo $form->end('Submit');
 				'hiddenField' => false, // this was needed to make checkbox validation work because of name conflicts
 				'class' => $isRequired.' '.$validationType,
 				), $multiple, $separator, $legend, $empty, $timeFormat, $dateFormat);
-			echo $form->input($model.'.'.$input['code'], $options); 
+			echo $this->Form->input($model.'.'.$input['code'], $options); 
 		} 
 		?>
 		</fieldset>
 		<?php
 	}
 	#close the form and show the submit button
-	echo $form->end('Submit');
+	echo $this->Form->end('Submit');
 } // end the else which display the add type of form
 ?>
 </div>

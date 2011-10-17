@@ -24,32 +24,32 @@
 
 <div class="forms add-form">
 <h1><?php __('Create a Form');?></h1>
-<?php echo $form->create('Form');?>
+<?php echo $this->Form->create('Form');?>
 	<fieldset>
  		<legend><?php __('Add Form');?></legend>
 	<?php
-		echo $form->input('Form.id');
-		echo $form->input('Form.name'); 
+		echo $this->Form->input('Form.id');
+		echo $this->Form->input('Form.name'); 
 	?>
     </fieldset>
     <fieldset>
     	<legend><?php __('Settings');?></legend>
      <?php
-		echo $form->input('Form.method');
-		echo $form->input('Form.action', array('after' => ' (ex: add, edit, view, save, remove)'));
-		echo $form->input('Form.plugin'); 
-		echo $form->input('Form.model', array('after' => ' (camel case model name)' )); 
-		echo $form->input('Form.success_message'); 
-		echo $form->input('Form.success_url'); 
-		echo $form->input('Form.fail_message'); 
-		echo $form->input('Form.fail_url'); 
+		echo $this->Form->input('Form.method');
+		echo $this->Form->input('Form.action', array('after' => ' (ex: add, edit, view, save, remove)'));
+		echo $this->Form->input('Form.plugin'); 
+		echo $this->Form->input('Form.model', array('after' => ' (camel case model name)' )); 
+		echo $this->Form->input('Form.success_message'); 
+		echo $this->Form->input('Form.success_url'); 
+		echo $this->Form->input('Form.fail_message'); 
+		echo $this->Form->input('Form.fail_url'); 
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
+<?php echo $this->Form->end('Submit');?>
 </div>
 <?php 
 // set the contextual menu items
-$menu->setValue(array(
+$this->Menu->setValue(array(
 	array(
 		'heading' => 'Forms',
 		'items' => array(

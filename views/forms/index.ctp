@@ -84,7 +84,7 @@ foreach ($forms as $group):
 <?php echo $this->element('paging'); ?>
 <?php 
 // set the contextual menu items
-$menu->setValue(array(
+$this->Menu->setValue(array(
 	array(
 		'heading' => 'Forms',
 		'items' => array(

@@ -23,27 +23,27 @@
 
 <div class="formFieldsets form">
 <h1><?php __('Manage Form Fieldset');?></h1>
-<?php echo $form->create('FormFieldset', array('action' => 'edit'));?>
+<?php echo $this->Form->create('FormFieldset', array('action' => 'edit'));?>
 	<fieldset>
  		<legend><?php __('Fieldset');?></legend>
 	<?php
-		echo $form->input('FormFieldset.id');
-		echo $form->input('FormFieldset.form_id'); 
-		echo $form->input('FormFieldset.name'); 
-		echo $form->input('FormFieldset.legend', array('after' => ' Leave empty to remove legend tag')); 
-		echo $form->input('FormFieldset.model'); 
-		echo $form->input('FormFieldset.order'); 
+		echo $this->Form->input('FormFieldset.id');
+		echo $this->Form->input('FormFieldset.form_id'); 
+		echo $this->Form->input('FormFieldset.name'); 
+		echo $this->Form->input('FormFieldset.legend', array('after' => ' Leave empty to remove legend tag')); 
+		echo $this->Form->input('FormFieldset.model'); 
+		echo $this->Form->input('FormFieldset.order'); 
 	?>
     </fieldset>
-<?php echo $form->end('Submit');?>
+<?php echo $this->Form->end('Submit');?>
 </div>
 <?php 
 // set the contextual menu items
-$menu->setValue(array(
+$this->Menu->setValue(array(
 	array(
 		'heading' => 'Form Fieldsets',
 		'items' => array(
-			$this->Html->link(__('Delete', true), array('action' => 'delete', $form->value('FormFieldset.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $form->value('FormFieldset.id'))),
+			$this->Html->link(__('Delete', true), array('action' => 'delete', $this->Form->value('FormFieldset.id')), null, sprintf(__('Are you sure you want to delete # %s?', true), $this->Form->value('FormFieldset.id'))),
 			$this->Html->link(__('List FormInputs', true), array('action' => 'index')),
 			)
 		),

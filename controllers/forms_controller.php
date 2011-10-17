@@ -36,7 +36,7 @@ class FormsController extends FormsAppController {
  */
 	function display($id, $type = 'add') {
 		$formGroup = $this->Form->display($id, $type);
-		if (!empty($formGroup) && isset($this->params['requested'])) {
+		if (!empty($formGroup) && isset($this->request->params['requested'])) {
 			$formGroup = array_merge($formGroup, $this->_specialData()); 
         	return $formGroup;
         } else {

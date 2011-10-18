@@ -29,12 +29,6 @@
     <li>Create fieldsets - Even if it is a simple form you have to create a field set, to contain the inputs into groups.  If you later want to reuse some field sets in a second form this will come in very helpful anyway.  It also allows you to save to multiple database tables from a single form.</li>
     <li>Create inputs - Now that you have a form and the input groups (fieldsets) you can begin adding form inputs into your field sets.</li>
 </ol>
-<p>
-<?php
-echo $this->Paginator->counter(array(
-'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-));
-?></p>
 <table cellpadding="0" cellspacing="0">
 <tr>
 	<th><?php echo $this->Paginator->sort('id');?></th>
@@ -81,7 +75,7 @@ foreach ($forms as $group):
 <?php endforeach; ?>
 </table>
 </div>
-<?php echo $this->element('paging'); ?>
+<?php echo $this->Element('paging'); ?>
 <?php 
 // set the contextual menu items
 echo $this->Element('context_menu', array('menus' => array(

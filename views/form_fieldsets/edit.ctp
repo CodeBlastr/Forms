@@ -39,7 +39,7 @@
 </div>
 <?php 
 // set the contextual menu items
-$this->Menu->setValue(array(
+echo $this->Element('context_menu', array('menus' => array(
 	array(
 		'heading' => 'Form Fieldsets',
 		'items' => array(
@@ -54,6 +54,5 @@ $this->Menu->setValue(array(
 			$this->Html->link(__('List FormInputss', true), array('controller' => 'formInputs', 'action' => 'index')),
 			)
 		),
-	)
-);
+	)));
 ?>

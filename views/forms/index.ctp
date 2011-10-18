@@ -84,7 +84,7 @@ foreach ($forms as $group):
 <?php echo $this->element('paging'); ?>
 <?php 
 // set the contextual menu items
-$this->Menu->setValue(array(
+echo $this->Element('context_menu', array('menus' => array(
 	array(
 		'heading' => 'Forms',
 		'items' => array(
@@ -105,6 +105,5 @@ $this->Menu->setValue(array(
 			$this->Html->link(__('List Form Inputs', true), array('controller' => 'form_inputs', 'action' => 'index')),
 			)
 		),
-	)
-);
+	)));
 ?>

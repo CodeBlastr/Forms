@@ -22,7 +22,7 @@
 ?>
 
 <div class="forms index">
-<h2><?php __('Forms');?></h2>
+<h2><?php echo __('Forms');?></h2>
 <p> This forms plugin allows you to customize your website database.  Including system tables like project, tickets, contacts ,etc..  To use you should follow same basic form creation practices. </p>
 <ol>
 	<li>Create the form first - You have to have a container to house the inputs.</li>
@@ -43,7 +43,7 @@ echo $this->Paginator->counter(array(
 	<th><?php echo $this->Paginator->sort('plugin');?></th>
 	<th><?php echo $this->Paginator->sort('model');?></th>
 	<th><?php echo $this->Paginator->sort('action');?></th>
-	<th class="actions"><?php __('Actions');?></th>
+	<th class="actions"><?php echo __('Actions');?></th>
 </tr>
 <?php
 $i = 0;

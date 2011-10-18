@@ -22,10 +22,10 @@
 ?>
 
 <div class="formFieldsets form">
-<h1><?php __('Manage Form Fieldset');?></h1>
+<h1><?php echo __('Manage Form Fieldset');?></h1>
 <?php echo $this->Form->create('FormFieldset', array('action' => 'edit'));?>
 	<fieldset>
- 		<legend><?php __('Fieldset');?></legend>
+ 		<legend><?php echo __('Fieldset');?></legend>
 	<?php
 		echo $this->Form->input('FormFieldset.id');
 		echo $this->Form->input('FormFieldset.form_id'); 

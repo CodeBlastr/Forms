@@ -22,17 +22,17 @@
 ?>
 
 <div class="forms add-form">
-<h1><?php __('Edit a Form');?></h1>
+<h1><?php echo __('Edit a Form');?></h1>
 <?php echo $this->Form->create('Form');?>
 	<fieldset>
- 		<legend><?php __('Add Form');?></legend>
+ 		<legend><?php echo __('Add Form');?></legend>
 	<?php
 		echo $this->Form->input('Form.id');
 		echo $this->Form->input('Form.name'); 
 	?>
     </fieldset>
     <fieldset>
-    	<legend><?php __('Settings');?></legend>
+    	<legend><?php echo __('Settings');?></legend>
      <?php
 		echo $this->Form->input('Form.method');
 		echo $this->Form->input('Form.action', array('after' => ' (ex: add, edit, view, save, remove)'));

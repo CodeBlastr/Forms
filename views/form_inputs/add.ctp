@@ -24,9 +24,9 @@
 <div class="formInputs form">
 	<fieldset>
 	<?php echo $this->Form->create('FormInput');?>
- 		<legend><?php __('Add Form Input');?></legend>
+ 		<legend><?php echo __('Add Form Input');?></legend>
         <fieldset>
- 		<legend><?php __('How should the field appear in the form?');?></legend>
+ 		<legend><?php echo __('How should the field appear in the form?');?></legend>
 	<?php
 		echo (isset($duplicate) ? $this->Form->input('is_duplicate', array('type' => 'hidden', 'value' => '1')) : ''); 
 		echo $this->Form->input('FormInput.name', array('label' => 'Field Label')); 
@@ -38,7 +38,7 @@
 		echo $this->Form->input('FormInput.is_editable'); 
 			?>
 	        <fieldset>
-	 		<legend><?php __('Text field options');?></legend>
+	 		<legend><?php echo __('Text field options');?></legend>
 	        <?php 
 			# for text fields
 			echo $this->Form->input('FormInput.min_length'); 
@@ -46,7 +46,7 @@
 			?>
 	        </fieldset>
 	        <fieldset>
-	 		<legend><?php __('Textarea field options');?></legend>
+	 		<legend><?php echo __('Textarea field options');?></legend>
 	        <?php 
 			# for textarea fields
 			echo $this->Form->input('FormInput.rows'); 
@@ -54,7 +54,7 @@
 			?>
 	        </fieldset>
 	        <fieldset>
-	 		<legend><?php __('Selects, checkboxes, and multi-selects, and radio sets options');?></legend>
+	 		<legend><?php echo __('Selects, checkboxes, and multi-selects, and radio sets options');?></legend>
 	        <?php  
 			# for selects, checkboxes, and multi-selects, and radio sets
 			echo $this->Form->input('FormInput.legend', array('after' => ' text above radio input types')); 
@@ -65,7 +65,7 @@
 			?>
 	        </fieldset>
 	        <fieldset>
-	 		<legend><?php __('Date field options');?></legend>
+	 		<legend><?php echo __('Date field options');?></legend>
 	        <?php 
 			echo $this->Form->input('FormInput.time_format', array('after' => ' valid values are 12, 24, and none')); 
 			echo $this->Form->input('FormInput.date_format', array('after' => ' valid values are DMY, MDY, YMD and NONE')); 
@@ -76,7 +76,7 @@
 	    	</fieldset>
     	</fieldset>
         <fieldset>
- 		<legend><?php __('How should the information be treated in the database?');?></legend>
+ 		<legend><?php echo __('How should the information be treated in the database?');?></legend>
      <?php
 		echo $this->Form->input('FormInput.code', array('after' => 'The actual database column name if applicable.')); 
 		echo $this->Form->input('FormInput.is_not_db_field'); 
@@ -84,7 +84,7 @@
 	?>
     	</fieldset>
         <fieldset>
- 		<legend><?php __('Would you like ajax validation rules and messages?');?></legend>
+ 		<legend><?php echo __('Would you like ajax validation rules and messages?');?></legend>
      <?php
 		echo $this->Form->input('FormInput.is_required'); 
 		echo $this->Form->input('FormInput.validation', array('type' => 'select', 'label' => 'Validation Type', 'options' => array('email' => 'email', 'number' => 'number'), 'empty' => true)); 
@@ -92,14 +92,14 @@
 	?>
     	</fieldset>
         <fieldset>
- 		<legend><?php __('Should the field be prepopulated with any data?');?></legend>
+ 		<legend><?php echo __('Should the field be prepopulated with any data?');?></legend>
      <?php
 		echo $this->Form->input('FormInput.system_default_value', array('empty' => true, 'options' => array('current user' => 'current user'))); 
 		echo $this->Form->input('FormInput.default_value'); 
 	?>
     	</fieldset>
         <fieldset>
- 		<legend><?php __('Do you want anything around the input (usually for help text)?');?></legend>
+ 		<legend><?php echo __('Do you want anything around the input (usually for help text)?');?></legend>
      <?php
 		echo $this->Form->input('FormInput.before'); 
 		echo $this->Form->input('FormInput.separator'); 
@@ -110,7 +110,7 @@
 	?>
     	</fieldset>
         <fieldset>
- 		<legend><?php __('Mostly unused field options for future use.');?></legend>
+ 		<legend><?php echo __('Mostly unused field options for future use.');?></legend>
      <?php
 		echo $this->Form->input('FormInput.is_unique'); 
 		echo $this->Form->input('FormInput.is_system'); 

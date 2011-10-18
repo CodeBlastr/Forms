@@ -22,10 +22,10 @@
 ?>
 
 <div class="formInputs form">
-<h1><?php __('Manage Form Input');?></h1>
+<h1><?php echo __('Manage Form Input');?></h1>
 <?php echo $this->Form->create('Form Input');?>
 	<fieldset>
- 		<legend><?php __('Edit Form Input');?></legend>
+ 		<legend><?php echo __('Edit Form Input');?></legend>
 	<?php
 		echo $this->Form->input('FormInput.id');
 		echo $this->Form->input('FormInput.form_fieldset_id'); 

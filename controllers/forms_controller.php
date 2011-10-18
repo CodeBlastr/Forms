@@ -57,39 +57,39 @@ class FormsController extends FormsAppController {
 	 */
 	function process() {
 		$this->Session->delete('errors');
-		if (!empty($this->data)) {
-			$plugin = $this->data['Form']['plugin'];
-			$modelName = $this->data['Form']['model'];
-			$action = $this->data['Form']['action'];
+		if (!empty($this->request->data)) {
+			$plugin = $this->request->data['Form']['plugin'];
+			$modelName = $this->request->data['Form']['model'];
+			$action = $this->request->data['Form']['action'];
 			$Model = ClassRegistry::init($modelName);
 			# validates the data before trying to run the action
-			# previously this was just $this->data but was changed to $this->data[$modelName] because 
+			# previously this was just $this->request->data but was changed to $this->request->data[$modelName] because 
 			# I could not figure out why the category data was causing a validation failure 4/22/2011 RK
-			if ($Model->saveAll($this->data[$modelName], array('validate' => 'only'))) {
+			if ($Model->saveAll($this->request->data[$modelName], array('validate' => 'only'))) {
 				try {
-					$result = $Model->$action($this->data);
+					$result = $Model->$action($this->request->data);
 					if ($result) {
-						if (!empty($this->data['Form']['success_message'])) {
-							$this->Session->setFlash($this->data['Form']['success_message'], true);
+						if (!empty($this->request->data['Form']['success_message'])) {
+							$this->Session->setFlash($this->request->data['Form']['success_message'], true);
 						} else {
 							$this->Session->setFlash(__('Success!', true));
 						}
-						if (!empty($this->data['Form']['success_url'])) {
-							$this->redirect($this->data['Form']['success_url']);
+						if (!empty($this->request->data['Form']['success_url'])) {
+							$this->redirect($this->request->data['Form']['success_url']);
 						} else {
 							$this->redirect($this->referer());
 						}			
 					} else {
 						# 3rd point of failure is likely a database error
-						if (!empty($this->data['Form']['fail_message'])) {
-							$this->Session->setFlash($this->data['Form']['fail_message'], true);
+						if (!empty($this->request->data['Form']['fail_message'])) {
+							$this->Session->setFlash($this->request->data['Form']['fail_message'], true);
 						} else {
 							$this->Session->setFlash(__('Please Try Again.', true));
 						}
-						if (!empty($this->data['Form']['fail_url'])) {
+						if (!empty($this->request->data['Form']['fail_url'])) {
 							# this makes the submitted form data accessible by sessions
 							$this->Session->write($Model->data);	
-							$this->redirect($this->data['Form']['fail_url']);
+							$this->redirect($this->request->data['Form']['fail_url']);
 						} else {
 							# this makes the submitted form data accessible by sessions
 							$this->Session->write($Model->data);
@@ -106,15 +106,15 @@ class FormsController extends FormsAppController {
 				}	
 			} else {
 				# 1st point of failure, is validation
-				if (!empty($this->data['Form']['fail_message'])) {
-					$this->Session->setFlash($this->data['Form']['fail_message'], true);
+				if (!empty($this->request->data['Form']['fail_message'])) {
+					$this->Session->setFlash($this->request->data['Form']['fail_message'], true);
 				} else {
 					$this->Session->setFlash(__('Submission has invalid data.', true));
 				}
-				if (!empty($this->data['Form']['fail_url'])) {
+				if (!empty($this->request->data['Form']['fail_url'])) {
 					# this makes the submitted form data accessible by sessions
 					$this->Session->write($Model->data);	
-					$this->redirect($this->data['Form']['fail_url']);
+					$this->redirect($this->request->data['Form']['fail_url']);
 				} else {
 					# this makes the submitted form data accessible by sessions
 					$this->Session->write($Model->data);	
@@ -134,8 +134,8 @@ class FormsController extends FormsAppController {
 	}
 
 	function add() {
-		if (!empty($this->data)) {
-			if ($this->Form->add($this->data)) {
+		if (!empty($this->request->data)) {
+			if ($this->Form->add($this->request->data)) {
 				$this->Session->setFlash(__('The Form has been saved', true));
 				$this->redirect(array('action'=>'index'));
 			} else {
@@ -147,8 +147,8 @@ class FormsController extends FormsAppController {
 	}
 
 	function edit($id = null) {
-		if (!empty($this->data)) {
-			if ($this->Form->add($this->data)) {
+		if (!empty($this->request->data)) {
+			if ($this->Form->add($this->request->data)) {
 				$this->Session->setFlash(__('The Form has been saved', true));
 				$this->redirect(array('action'=>'index'));
 			} else {
@@ -156,7 +156,7 @@ class FormsController extends FormsAppController {
 			}
 		}
 		
-		$this->data = $this->Form->read(null, $id);
+		$this->request->data = $this->Form->read(null, $id);
 		$this->set('methods', array('post' => 'post', 'get' => 'get', 'file' => 'file', 'put' => 'put', 'delete' => 'delete')); 
 	}
 

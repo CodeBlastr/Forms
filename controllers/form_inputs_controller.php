@@ -45,9 +45,9 @@ class FormInputsController extends FormsAppController {
  * @todo			Move the second part of this save to the model, so that it is simply part of the save operation, and can be reused.
  */
 	function add() {
-		if (!empty($this->data)) {
+		if (!empty($this->request->data)) {
 			# create the formInput
-			if($this->FormInput->add($this->data)) {
+			if($this->FormInput->add($this->request->data)) {
 				$this->Session->setFlash(__('Input Successfully Added!', true));
 				$this->redirect(array('action'=>'index'));
 			} else {
@@ -71,9 +71,9 @@ class FormInputsController extends FormsAppController {
  * @todo			Move the second part of this save to the model, so that it is simply part of the save operation, and can be reused.
  */
 	function edit($id = null) {
-		if (!empty($this->data)) {
+		if (!empty($this->request->data)) {
 			# create the formInput
-			if($this->FormInput->save($this->data)) {
+			if($this->FormInput->save($this->request->data)) {
 				$this->Session->setFlash(__('Input Successfully Edited!', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -82,7 +82,7 @@ class FormInputsController extends FormsAppController {
 		}
 		
 		# variables needed for display of the view
-		$this->data = $this->FormInput->read(null, $id);
+		$this->request->data = $this->FormInput->read(null, $id);
 		$formFieldsets = $this->FormInput->FormFieldset->find('list');
 		$this->set(compact('formFieldsets'));
 		$this->set('inputTypes', $this->FormInput->inputTypes());

@@ -34,16 +34,16 @@ class FormFieldsetsController extends FormsAppController {
 	}
 
 	function edit($id = null) {
-		if (!empty($this->data)) {
-			if ($this->FormFieldset->save($this->data)) {
+		if (!empty($this->request->data)) {
+			if ($this->FormFieldset->save($this->request->data)) {
 				$this->Session->setFlash(__('The Fieldset has been saved', true));
 				$this->redirect(array('action'=>'index'));
 			} else {
 				$this->Session->setFlash(__('The Fieldset could not be saved. Please, try again.', true));
 			}
 		}
-		if (empty($this->data)) {
-			$this->data = $this->FormFieldset->read(null, $id);
+		if (empty($this->request->data)) {
+			$this->request->data = $this->FormFieldset->read(null, $id);
 			$forms = $this->FormFieldset->Form->find('list');
 			$this->set(compact('forms'));
 		}

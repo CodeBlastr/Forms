@@ -61,7 +61,8 @@ class FormsController extends FormsAppController {
 			$plugin = $this->request->data['Form']['plugin'];
 			$modelName = $this->request->data['Form']['model'];
 			$action = $this->request->data['Form']['action'];
-			$Model = ClassRegistry::init($modelName);
+			$init = !empty($plugin) ? $plugin . '.' . $modelName : $modelName;
+			$Model = ClassRegistry::init($init);
 			# validates the data before trying to run the action
 			# previously this was just $this->request->data but was changed to $this->request->data[$modelName] because 
 			# I could not figure out why the category data was causing a validation failure 4/22/2011 RK

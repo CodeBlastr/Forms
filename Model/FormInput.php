@@ -199,12 +199,12 @@ class FormInput extends FormsAppModel {
  * @todo				Generalize and move to app model if its needed in any other model.
  */
 	function _initialCodeCheck($code){
-		if (!empty($this->request->data['FormInput']['is_duplicate'])) {
+		if (!empty($this->data['FormInput']['is_duplicate'])) {
 			return true;
 		} else {
 			# this checks to see if a field name now exists in the table that matches input info, 
 			# initial validation should fail if it does, so that an error can be returned.
-			if($this->_checkFieldExistence($this->request->data['FormInput'])) {
+			if($this->_checkFieldExistence($this->data['FormInput'])) {
 				return false;
 			} else {
 				return true;
@@ -307,7 +307,7 @@ class FormInput extends FormsAppModel {
  */
 	function _getFieldType($type) {
 		/*
-		$this->request->data['input_type'] values
+		$this->data['input_type'] values
 		text = 'VARCHAR'
 		textarea = 'TEXT'
 		richtext = 'TEXT'

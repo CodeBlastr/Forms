@@ -48,7 +48,7 @@ class Form extends FormsAppModel {
 /**
  * Used to create the convenience field "url".
  *
- * @param {data} 		The $this->request->data array.
+ * @param {data} 		The $this->data array.
  */
 	function add($data) {
 		# create the form url convenience field

@@ -24,7 +24,8 @@
  */
 class FormInputsController extends FormsAppController {
 
-	var $name = 'FormInputs';
+	public $name = 'FormInputs';
+	public $uses = 'Forms.FormInput';
 
 
 /**

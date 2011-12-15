@@ -25,7 +25,8 @@
  */
 class FormFieldsetsController extends FormsAppController {
 
-	var $name = 'FormFieldsets';
+	public $name = 'FormFieldsets';
+	public $uses = 'Forms.FormFieldset';
 	
 
 	function index() {

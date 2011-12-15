@@ -25,8 +25,9 @@
  */
 class FormsController extends FormsAppController {
 
-	var $name = 'Forms';
-	var $allowedActions = array('display', 'process');
+	public $name = 'Forms';
+	public $uses = 'Forms.Form';
+	public $allowedActions = array('display', 'process');
 
 /**
  * Used to display a form using requestAction in the default layout.

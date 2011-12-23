@@ -13,7 +13,7 @@
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2010, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaâ„¢ Project
  * @package       zuha
  * @subpackage    zuha.app.plugins.forms.views.elements
  * @since         Zuha(tm) v 0.0.1
@@ -180,7 +180,13 @@ echo $this->Form->end('Submit');
 			$dateFormat = !empty($input['date_format']) ? array('date_format' => $input['date_format']) : array();
 			$divId = !empty($input['div_id']) ? array('id' => $input['div_id']) : array();
 			$divClass = !empty($input['div_class']) ? array('class' => $input['div_class']) : array();
-			//$divOptions = array_merge($divId, $divClass);
+			if(!empty($divClass) && !empty($divId)) {
+              $divOptions = array_merge($divId, $divClass);
+            } else {
+              if(empty($divClass)) $divOptions = $divId;
+              elseif(empty ($divId)) $divOptions = $divClass;
+            }
+            if(empty($divOptions)) $divOptions = null;
 			$isRequired = !empty($input['is_required']) ? 'required' : null;
 			$validationType = !empty($input['validation']) ? $input['validation'] : null;
 			# special field values
@@ -209,11 +215,12 @@ echo $this->Form->end('Submit');
 				'minYear' => $input['min_year'],
 				'maxYear' => $input['max_year'],
 				'interval' => $input['minute_interval'],
-				'div' =>  array('id' => $input['div_id'], 'class' => $input['div_class']),
+				//'div' =>  $divOptions,
 				'ckeSettings' => $ckeSettings,
 				'hiddenField' => false, // this was needed to make checkbox validation work because of name conflicts
 				'class' => $isRequired.' '.$validationType,
 				), $multiple, $separator, $legend, $empty, $timeFormat, $dateFormat);
+            if($divOptions !== null) $options['div'] = $divOptions;
 			echo $this->Form->input($model.'.'.$input['code'], $options);
 		}
 		?>

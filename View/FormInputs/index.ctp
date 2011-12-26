@@ -91,7 +91,7 @@ foreach ($formInputs as $formInput):
 <?php echo $this->element('paging'); ?>
 <?php 
 // set the contextual menu items
-echo $this->Element('context_menu', array('menus' => array(
+$this->set('context_menu', array('menus' => array(
 	array(
 		'heading' => 'Form Inputs',
 		'items' => array(

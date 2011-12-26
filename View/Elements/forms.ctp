@@ -13,7 +13,7 @@
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2010, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaâ„¢ Project
  * @package       zuha
  * @subpackage    zuha.app.plugins.forms.views.elements
  * @since         Zuha(tm) v 0.0.1
@@ -33,11 +33,11 @@ $groups = $this->requestAction('/forms/forms/display/'.$id);
 
 #display the view type
 if (strpos($id, 'view') > -1) {
-	
+
 	#get the model from the controller
 	$model = Inflector::classify($this->request->params['controller']);
-	
-	foreach ($groups['FormFieldset'] as $fieldset) {  
+
+	foreach ($groups['FormFieldset'] as $fieldset) {
 		echo (!empty($fieldset['legend']) ? '<h4>'.$fieldset['legend'].'</h4>' : ''); ?>
       	<ul>
 	    <?php
@@ -46,35 +46,35 @@ if (strpos($id, 'view') > -1) {
 		}
 		?>
         </ul>
-      <?php 
+      <?php
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 #display the edit type
 } else if (strpos($id, 'edit') > -1) {
-	
-		
+
+
 # initialize the form open tag
 echo $this->Form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method']));
 /*echo $this->Form->create($groups['Form']['model'], array(
 				'url' => $groups['Form']['url'],
 				'method' => $groups['Form']['method'],
 				));*/
-echo $this->Form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin'])); 
-echo $this->Form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model'])); 
-echo $this->Form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action'])); 
-echo $this->Form->input('Form.success_message', array('type' => 'hidden', 'value' => $groups['Form']['success_message'])); 
-echo $this->Form->input('Form.success_url', array('type' => 'hidden', 'value' => $groups['Form']['success_url'])); 
-echo $this->Form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message'])); 
-echo $this->Form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url'])); 
+echo $this->Form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin']));
+echo $this->Form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model']));
+echo $this->Form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action']));
+echo $this->Form->input('Form.success_message', array('type' => 'hidden', 'value' => $groups['Form']['success_message']));
+echo $this->Form->input('Form.success_url', array('type' => 'hidden', 'value' => $groups['Form']['success_url']));
+echo $this->Form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message']));
+echo $this->Form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url']));
 
-foreach ($groups['FormFieldset'] as $fieldset) {  
+foreach ($groups['FormFieldset'] as $fieldset) {
 ?>
 	<fieldset>
   <?php echo (!empty($fieldset['legend']) ? '<legend>'.$fieldset['legend'].'</legend>' : ''); ?>
@@ -117,28 +117,28 @@ foreach ($groups['FormFieldset'] as $fieldset) {
 				'minYear' => $input['min_year'],
 				'maxYear' => $input['max_year'],
 				'interval' => $input['minute_interval'],
-				'div' => array('id' => $input['div_id'], 'div_class' => $input['div_class']),
+				'div' => array('id' => $input['div_id'], 'class' => $input['div_class']),
 				'ckeSettings' => $ckeSettings,
-				)); 
-	} 
+				));
+	}
 ?>
   </fieldset>
   <?php
 }
 #close the form and show the submit button
 echo $this->Form->end('Submit');
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
 #display the add type by default
 } else {
 
@@ -148,18 +148,18 @@ echo $this->Form->end('Submit');
 	# set the form variables in the case of an error
 	$this->Form->data = $this->Session->read();
 	$this->Form->validationErrors = $this->Session->read('errors');
-		
+
 	# initialize the form open tag
 	echo $this->Form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method'], 'id' => 'addForm'));
-	echo $this->Form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin'])); 
-	echo $this->Form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model'])); 
-	echo $this->Form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action'])); 
-	echo $this->Form->input('Form.success_message', array('type' => 'hidden', 'value' => $groups['Form']['success_message'])); 
-	echo $this->Form->input('Form.success_url', array('type' => 'hidden', 'value' => $groups['Form']['success_url'])); 
-	echo $this->Form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message'])); 
-	echo $this->Form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url'])); 
-	
-	foreach ($groups['FormFieldset'] as $fieldset) {  
+	echo $this->Form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin']));
+	echo $this->Form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model']));
+	echo $this->Form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action']));
+	echo $this->Form->input('Form.success_message', array('type' => 'hidden', 'value' => $groups['Form']['success_message']));
+	echo $this->Form->input('Form.success_url', array('type' => 'hidden', 'value' => $groups['Form']['success_url']));
+	echo $this->Form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message']));
+	echo $this->Form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url']));
+
+	foreach ($groups['FormFieldset'] as $fieldset) {
 	?>
 
 	<fieldset id="fieldset<?php echo $fieldset['id']; ?>">
@@ -180,7 +180,13 @@ echo $this->Form->end('Submit');
 			$dateFormat = !empty($input['date_format']) ? array('date_format' => $input['date_format']) : array();
 			$divId = !empty($input['div_id']) ? array('id' => $input['div_id']) : array();
 			$divClass = !empty($input['div_class']) ? array('class' => $input['div_class']) : array();
-			//$divOptions = array_merge($divId, $divClass);
+			if(!empty($divClass) && !empty($divId)) {
+              $divOptions = array_merge($divId, $divClass);
+            } else {
+              if(empty($divClass)) $divOptions = $divId;
+              elseif(empty ($divId)) $divOptions = $divClass;
+            }
+            if(empty($divOptions)) $divOptions = null;
 			$isRequired = !empty($input['is_required']) ? 'required' : null;
 			$validationType = !empty($input['validation']) ? $input['validation'] : null;
 			# special field values
@@ -209,13 +215,14 @@ echo $this->Form->end('Submit');
 				'minYear' => $input['min_year'],
 				'maxYear' => $input['max_year'],
 				'interval' => $input['minute_interval'],
-				//'div' => $divOptions,  // removed because nothing uses it yet, and it was causing an error I didn't have time to debug
+				//'div' =>  $divOptions,
 				'ckeSettings' => $ckeSettings,
 				'hiddenField' => false, // this was needed to make checkbox validation work because of name conflicts
 				'class' => $isRequired.' '.$validationType,
 				), $multiple, $separator, $legend, $empty, $timeFormat, $dateFormat);
-			echo $this->Form->input($model.'.'.$input['code'], $options); 
-		} 
+            if($divOptions !== null) $options['div'] = $divOptions;
+			echo $this->Form->input($model.'.'.$input['code'], $options);
+		}
 		?>
 		</fieldset>
 		<?php
@@ -228,8 +235,8 @@ echo $this->Form->end('Submit');
 
 <script src="/js/system/jquery.validate.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-$().ready(function() {	
-		
+$().ready(function() {
+
 	$("#addForm").validate();
 });
 </script>

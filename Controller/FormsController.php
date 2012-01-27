@@ -86,7 +86,7 @@ class FormsController extends FormsAppController {
 						if (!empty($this->request->data['Form']['fail_message'])) {
 							$this->Session->setFlash($this->request->data['Form']['fail_message'], true);
 						} else {
-							$this->Session->setFlash(__('Please Try Again.', true));
+							$this->Session->setFlash(__('Please Try Again.'));
 						}
 						if (!empty($this->request->data['Form']['fail_url'])) {
 							# this makes the submitted form data accessible by sessions
@@ -103,8 +103,21 @@ class FormsController extends FormsAppController {
 					# 2nd point of failure would be detected in the model exceptions
 					# this makes the submitted form data accessible by sessions
 					$this->Session->write($Model->data);	
-					$this->Session->setFlash($e->getMessage());	
-					$this->redirect($this->referer());			
+					# if registration verification is required the model will return this code
+					if ($e->getCode() > 500000) {
+						$this->Session->setFlash($e->getMessage() . $this->request->data['Form']['success_message']);
+						$this->redirect($this->request->data['Form']['success_url']);
+					} else {
+						if (!empty($this->request->data['Form']['fail_url'])) {
+							# this makes the submitted form data accessible by sessions
+							$this->Session->setFlash($e->getMessage());	
+							$this->redirect($this->request->data['Form']['fail_url']);
+						} else {
+							# this makes the submitted form data accessible by sessions
+							$this->Session->setFlash($e->getMessage() . $Model->validationErrors);
+							$this->redirect($this->referer());
+						}
+					}	
 				}	
 			} else {
 				# 1st point of failure, is validation

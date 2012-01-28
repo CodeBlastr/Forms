@@ -23,12 +23,6 @@
 
 <div class="formFieldsets index">
 <h2><?php echo __('Form Fieldsets');?></h2>
-<p>
-<?php
-echo $this->Paginator->counter(array(
-'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-));
-?></p>
 <table cellpadding="0" cellspacing="0">
 <tr>
 	<th><?php echo $this->Paginator->sort('id');?></th>
@@ -68,7 +62,7 @@ foreach ($formFieldsets as $formFieldset):
 		</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $formFieldset['FormFieldset']['id'])); ?>
-			<?php echo $this->Html->link(__('View Form Inputs', true), array('controller' => 'formInputs', 'action' => 'index', 'fieldset' => $formFieldset['FormFieldset']['id'])); ?>
+			<?php echo $this->Html->link(__('View Form Inputs', true), array('controller' => 'formInputs', 'action' => 'index', 'filter' => 'formFieldset:' . $formFieldset['FormFieldset']['id'])); ?>
 			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $formFieldset['FormFieldset']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $formFieldset['FormFieldset']['id'])); ?>
 		</td>
 	</tr>

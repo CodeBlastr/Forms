@@ -141,10 +141,6 @@ echo $this->Form->end('Submit');
 
 #display the add type by default
 } else {
-
-	# get rid of variables which should never be shown on redirect
-	$this->Session->delete('User.password');
-	$this->Session->delete('User.confirm_password');
 	# set the form variables in the case of an error
 	$this->Form->data = $this->Session->read();
 	$this->Form->validationErrors = $this->Session->read('errors');
@@ -235,8 +231,5 @@ echo $this->Form->end('Submit');
 
 <script src="/js/system/jquery.validate.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-$().ready(function() {
-
-	$("#addForm").validate();
-});
+$("#addForm").validate();
 </script>

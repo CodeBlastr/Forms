@@ -101,6 +101,7 @@ foreach ($groups['FormFieldset'] as $fieldset) {
 				'label' => $input['name'],
 				'default' => $defaultValue,
 				'selected' => $defaultValue,
+                'placeholder' => $defaultValue,
 				'options' => $options,
 				'before' => $input['before'],
 				'between' => $input['between'],

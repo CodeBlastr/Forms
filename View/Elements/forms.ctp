@@ -119,6 +119,7 @@ foreach ($groups['FormFieldset'] as $fieldset) {
 				'interval' => $input['minute_interval'],
 				'div' => array('id' => $input['div_id'], 'class' => $input['div_class']),
 				'ckeSettings' => $ckeSettings,
+                'placeholder' => $input['placeholder'],
 				));
 	}
 ?>

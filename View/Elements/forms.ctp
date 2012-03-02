@@ -214,6 +214,7 @@ echo $this->Form->end('Submit');
 				'interval' => $input['minute_interval'],
 				//'div' =>  $divOptions,
 				'ckeSettings' => $ckeSettings,
+                'placeholder' => $input['placeholder'],
 				'hiddenField' => false, // this was needed to make checkbox validation work because of name conflicts
 				'class' => $isRequired.' '.$validationType,
 				), $multiple, $separator, $legend, $empty, $timeFormat, $dateFormat);

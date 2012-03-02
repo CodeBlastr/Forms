@@ -177,7 +177,7 @@ echo $this->Form->end('Submit');
 			$dateFormat = !empty($input['date_format']) ? array('date_format' => $input['date_format']) : array();
 			$divId = !empty($input['div_id']) ? array('id' => $input['div_id']) : array();
 			$divClass = !empty($input['div_class']) ? array('class' => $input['div_class']) : array();
-            $label = ($input['show_label'] == 1) ? array('label' => $input['name']) : false;
+            $label = ($input['show_label'] == 1) ? $input['name'] : false;
 			if(!empty($divClass) && !empty($divId)) {
               $divOptions = array_merge($divId, $divClass);
             } else {

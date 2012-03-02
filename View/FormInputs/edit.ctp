@@ -31,6 +31,7 @@
 		echo $this->Form->input('FormInput.form_fieldset_id');
 		echo $this->Form->input('FormInput.code');
 		echo $this->Form->input('FormInput.name');
+		echo $this->Form->input('FormInput.show_label', array('label' => 'Display the label?'));
 		echo $this->Form->input('FormInput.model_override');
 		echo $this->Form->input('FormInput.input_type');
 		echo $this->Form->input('FormInput.system_default_value', array('empty' => true, 'options' => array('current user' => 'current user')));

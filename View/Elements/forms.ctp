@@ -177,6 +177,7 @@ echo $this->Form->end('Submit');
 			$dateFormat = !empty($input['date_format']) ? array('date_format' => $input['date_format']) : array();
 			$divId = !empty($input['div_id']) ? array('id' => $input['div_id']) : array();
 			$divClass = !empty($input['div_class']) ? array('class' => $input['div_class']) : array();
+            $label = !empty($input['show_label']) ? array('label' => $input['name']) : false;
 			if(!empty($divClass) && !empty($divId)) {
               $divOptions = array_merge($divId, $divClass);
             } else {
@@ -198,7 +199,7 @@ echo $this->Form->end('Submit');
 			}
 			$options = array_merge(array(
 				'type' => $input['input_type'],
-				'label' => $input['name'],
+				'label' => $label,
 				'default' => $defaultValue,
 				'selected' => $defaultValue,
 				'options' => $options,

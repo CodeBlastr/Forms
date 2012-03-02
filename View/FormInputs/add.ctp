@@ -30,6 +30,7 @@
 	<?php
 		echo (isset($duplicate) ? $this->Form->input('is_duplicate', array('type' => 'hidden', 'value' => '1')) : '');
 		echo $this->Form->input('FormInput.name', array('label' => 'Field Label'));
+		echo $this->Form->input('FormInput.show_label', array('label' => 'Display the Label?'));
 		echo $this->Form->input('FormInput.form_fieldset_id');
 		echo $this->Form->input('FormInput.order');
 		echo $this->Form->input('FormInput.input_type');

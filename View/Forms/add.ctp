@@ -36,9 +36,9 @@
     	<legend><?php echo __('Settings');?></legend>
      <?php
 		echo $this->Form->input('Form.method');
-		echo $this->Form->input('Form.action', array('after' => ' (ex: add, edit, view, save, remove)'));
+		echo $this->Form->input('Form.action', array('placeholder' => ' (ex: add, edit, view, save, remove)'));
 		echo $this->Form->input('Form.plugin'); 
-		echo $this->Form->input('Form.model', array('after' => ' (camel case model name)' )); 
+		echo $this->Form->input('Form.model', array('placeholder' => ' (camel case model name)' )); 
 		echo $this->Form->input('Form.success_message'); 
 		echo $this->Form->input('Form.success_url'); 
 		echo $this->Form->input('Form.fail_message'); 

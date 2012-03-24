@@ -1,6 +1,6 @@
 <?php
 /**
- * Form Admin Index View
+ * Form Index View
  *
  * The view for a list of forms.
  *
@@ -82,21 +82,7 @@ $this->set('context_menu', array('menus' => array(
 	array(
 		'heading' => 'Forms',
 		'items' => array(
-			$this->Html->link(__('New Form', true), array('action' => 'add')),
-			)
-		),
-	array(
-		'heading' => 'Form Fieldsets',
-		'items' => array(
-			$this->Html->link(__('New Form Fieldset', true), array('controller' => 'form_fieldsets', 'action' => 'edit')),
-			$this->Html->link(__('Show Fieldsets', true), array('controller' => 'form_fieldsets', 'action' => 'index')),
-			)
-		),
-	array(
-		'heading' => 'Form Inputs',
-		'items' => array(
-			$this->Html->link(__('New Form Inputs', true), array('controller' => 'form_inputs', 'action' => 'add')),
-			$this->Html->link(__('List Form Inputs', true), array('controller' => 'form_inputs', 'action' => 'index')),
+			$this->Html->link(__('Add', true), array('action' => 'add'), array('class' => 'add')),
 			)
 		),
 	)));

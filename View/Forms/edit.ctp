@@ -222,36 +222,3 @@ function defaultValue() {
 	}
 }		
 </script>
-
-
-<style type="text/css">
-/*  Move this to mobi when done!!! */
-/* Make sure we move this right after the repo update */
-input[type=checkbox] {
-	margin: 4px 6px 7px 0;
-}
-form div.input.checkbox {
-	padding: 2em 0.4em 0;
-}
-.clear {
-	clear: both;
-}
-form label.error {
-	float: left;
-}
-form .editFormSpan {
-	position: relative;
-	display: block;
-	width: 1px;
-	height: 1px;
-}
-form .editFormSpan .editFormInput {
-	position: absolute;
-	top: 1.6em;
-	left: -1.4em;
-	text-indent: -3000px;
-	width: 23px;
-	height: 23px;
-	background: url('/img/admin/icons/icon-sprite.png') -581px -116px no-repeat;
-} 
-</style>

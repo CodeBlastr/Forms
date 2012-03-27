@@ -143,12 +143,13 @@ class Form extends FormsAppModel {
 			if (!empty($form['Form']['notifiees'])) {
 				$notifiees = explode(',', str_replace(' ', '', $form['Form']['notifiees']));
 				foreach ($notifiees as $recipient) {
-					$message = $data;
-					unset($message['Form']);
-					$message = print_r($message, true);
+					$messages = $data;
+					unset($messages['Form']);
+					$message = ZuhaSet::keyAsPaths($messages, array('parse' => true));
 					$this->__sendMail($recipient, 'Form submission', $message);
 				}
 			}
+			return true;
 		} else {
 			throw new Exception(__('Form id is null, cannot check notifications.'));
 		}

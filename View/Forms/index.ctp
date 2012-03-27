@@ -42,7 +42,7 @@ foreach ($forms as $group):
 ?>
 	<tr<?php echo $class;?>>
 		<td>
-			<?php echo __('{form: %s}', $group['Form']['id']); ?>
+			<?php echo __('&#123form: %s&#125;', $group['Form']['id']); ?>
 		</td>
 		<td>
 			<?php echo $group['Form']['name']; ?>
@@ -56,6 +56,7 @@ foreach ($forms as $group):
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $group['Form']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $group['Form']['id'])); ?>
+			<?php echo $this->Html->link(__('Copy'), array('action' => 'copy', $group['Form']['id'])); ?>
 			<?php echo $this->Html->link(__('Add Fieldset'), array('controller' => 'form_fieldsets', 'action' => 'add', $group['Form']['id'])); ?>
 			<?php echo $this->Html->link(__('View Fieldsets', true), array('controller' => 'form_fieldsets', 'action' => 'index', $group['Form']['id'])); ?>
 			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $group['Form']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $group['Form']['id'])); ?>

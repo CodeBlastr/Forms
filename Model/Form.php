@@ -28,6 +28,8 @@ class Form extends FormsAppModel {
 		'model' => array('notempty'),
 	);
 	
+	public $actsAs = array('Copyable');
+	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	public $hasMany = array(
 		'FormFieldset' => array(

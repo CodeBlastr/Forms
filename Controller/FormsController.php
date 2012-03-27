@@ -99,6 +99,25 @@ class FormsController extends FormsAppController {
 	}
 
 /**
+ * Used to create the convenience field "url".
+ *
+ * @param {data} 		The $this->data array.
+ */
+	public function copy($id = null) {
+		$this->Form->id = $id;
+		if (!$this->Form->exists()) {
+			throw new NotFoundException(__('Invalid form.'));
+		}
+		try {
+			$this->Form->copy($id);
+			$this->redirect(array('action' => 'index'));
+		} catch (Exception $e) {
+			debug($e->getMessage);
+			break;
+		}
+	}
+
+/**
  * Used to display a form using requestAction in the default layout.
  *
  * @param {id}			The form id to call.

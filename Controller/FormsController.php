@@ -36,15 +36,17 @@ class FormsController extends FormsAppController {
 
 	public function add() {
 		if (!empty($this->request->data)) {
-			if ($this->Form->add($this->request->data)) {
+			try {
+				$this->Form->add($this->request->data);
 				$this->Session->setFlash(__('The Form has been saved', true));
 				$this->redirect(array('action'=>'index'));
-			} else {
-				$this->Session->setFlash(__('The Form could not be saved. Please, try again.', true));
+			} catch (Exception $e) {
+				$this->Session->setFlash($e->getMessage());
 			}
 		}
 		
 		$this->set('methods', $this->Form->methods()); 
+		$this->set('copies', $this->Form->copyTypes());
 	}
 
 /**

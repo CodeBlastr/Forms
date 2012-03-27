@@ -66,15 +66,19 @@ class Form extends FormsAppModel {
  *
  * @param {data} 		The $this->data array.
  */
-	public function add($data) {
-		# create the form url convenience field
-		$plugin = Inflector::underscore(Inflector::pluralize($data['Form']['plugin']));
-		$controller = Inflector::underscore(Inflector::pluralize($data['Form']['model']));
-		$data['Form']['url'] = '/'.$plugin.'/'.$controller.'/'.$data['Form']['action'];
-		if ($this->save($data)) {
-			return true;
+	public function add($data) {		
+		if (empty($data['Form']['copy']) || $data['Form']['copy'] == 'custom') {
+			# create the form url convenience field
+			$plugin = Inflector::underscore(Inflector::pluralize($data['Form']['plugin']));
+			$controller = Inflector::underscore(Inflector::pluralize($data['Form']['model']));
+			$data['Form']['url'] = '/'.$plugin.'/'.$controller.'/'.$data['Form']['action'];
+			if ($this->save($data)) {
+				return true;
+			} else {
+				throw new Exception(__('Form add failed'));
+			}
 		} else {
-			return false;
+			return $this->_formTemplate($data['Form']['copy']);
 		}
 	}
 
@@ -155,6 +159,98 @@ class Form extends FormsAppModel {
 		} else {
 			throw new Exception(__('Form id is null, cannot check notifications.'));
 		}
+	}
+	
+	
+/**
+ * Form Template
+ * 
+ * Create a pre-determined form.
+ * @var string
+ * @return array
+ */
+	protected function _formTemplate($type = 'contact') {
+		if ($type == 'contact') {
+			$contact['Form']['name'] = 'Contact Form';
+			$contact['Form']['method'] = 'file';
+			$contact['Form']['plugin'] = 'Contacts';
+			$contact['Form']['model'] = 'Contact';
+			$contact['Form']['action'] = 'add';
+			$contact['Form']['url'] = '/contacts/contacts/add';
+			$contact['Form']['notifiees'] = '';
+			$contact['Form']['success_message'] = 'Thank you.';
+			$contact['Form']['success_url'] = '/home';
+			$contact['Form']['fail_message'] = 'Please try again.';
+			$contact['Form']['fail_url'] = '';
+			
+			$contact['FormInput'][0]['code'] = 'name';
+			$contact['FormInput'][0]['name'] = 'Name';
+			$contact['FormInput'][0]['show_label'] = 1;
+			$contact['FormInput'][0]['input_type'] = 'text';
+			$contact['FormInput'][0]['is_required'] = 1;
+			$contact['FormInput'][0]['is_not_db_field'] = 0;
+			$contact['FormInput'][0]['is_visible'] = 1;
+			$contact['FormInput'][0]['is_addable'] = 1;
+			$contact['FormInput'][0]['is_editable'] = 1;
+			
+			$contact['FormInput'][1]['code'] = 'contact_detail_type';
+			$contact['FormInput'][1]['name'] = 'Contact Detail Type';
+			$contact['FormInput'][1]['model_override'] = 'ContactDetail.0';
+			$contact['FormInput'][1]['input_type'] = 'hidden';
+			$contact['FormInput'][1]['default_value'] = 'Email';
+			$contact['FormInput'][1]['is_not_db_field'] = 0;
+			$contact['FormInput'][1]['is_visible'] = 1;
+			$contact['FormInput'][1]['is_addable'] = 1;
+			$contact['FormInput'][1]['is_editable'] = 1;
+			
+			$contact['FormInput'][2]['code'] = 'value';
+			$contact['FormInput'][2]['name'] = 'Email';
+			$contact['FormInput'][2]['show_label'] = 1;
+			$contact['FormInput'][2]['model_override'] = 'ContactDetail.0';
+			$contact['FormInput'][2]['input_type'] = 'text';
+			$contact['FormInput'][2]['is_required'] = 1;
+			$contact['FormInput'][2]['is_not_db_field'] = 0;
+			$contact['FormInput'][2]['is_visible'] = 1;
+			$contact['FormInput'][2]['is_addable'] = 1;
+			$contact['FormInput'][2]['is_editable'] = 1;			
+			$contact['FormInput'][2]['validation'] = 'email';
+			
+			$contact['FormInput'][3]['code'] = 'contact_detail_type';
+			$contact['FormInput'][3]['name'] = 'Contact Detail Type Notes';
+			$contact['FormInput'][3]['model_override'] = 'ContactDetail.1';
+			$contact['FormInput'][3]['input_type'] = 'hidden';
+			$contact['FormInput'][3]['default_value'] = 'Note';
+			$contact['FormInput'][3]['is_not_db_field'] = 0;
+			$contact['FormInput'][3]['is_visible'] = 1;
+			$contact['FormInput'][3]['is_addable'] = 1;
+			$contact['FormInput'][3]['is_editable'] = 1;
+			
+			$contact['FormInput'][4]['code'] = 'value';
+			$contact['FormInput'][4]['name'] = 'Comments';
+			$contact['FormInput'][4]['show_label'] = 1;
+			$contact['FormInput'][4]['model_override'] = 'ContactDetail.1';
+			$contact['FormInput'][4]['input_type'] = 'textarea';
+			$contact['FormInput'][4]['is_required'] = 1;
+			$contact['FormInput'][4]['is_not_db_field'] = 0;
+			$contact['FormInput'][4]['is_visible'] = 1;
+			$contact['FormInput'][4]['is_addable'] = 1;
+			$contact['FormInput'][4]['is_editable'] = 1;
+			
+			return $this->saveAll($contact, array('validate' => false));
+		}
+	}
+	
+/**
+ * Copy types
+ * 
+ * The types of forms available in $this->_formTemplate() in a form options format.
+ * @return array
+ */
+	public function copyTypes() {
+		return array(
+			'contact' => 'Contact Form',
+			'custom' => 'Custom',
+			);
 	}
 	
 /**

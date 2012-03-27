@@ -26,9 +26,9 @@
 <h1><?php echo __('Create a Form');?></h1>
 <?php echo $this->Form->create('Form');?>
 	<fieldset>
- 		<legend><?php echo __('Make a Copy');?></legend>
+ 		<legend><?php echo __('What type of form?');?></legend>
 	<?php
-		echo $this->Form->input('Form.copy'); 
+		echo $this->Form->input('Form.copy', array('label' => false, 'empty' => '--Select--')); 
 	?>
     </fieldset>
 	<fieldset>
@@ -77,5 +77,27 @@ $this->set('context_menu', array('menus' => array(
 			$this->Html->link(__('List FormInputs', true), array('controller' => 'form_inputs', 'action' => 'index')),
 			)
 		),
-	)));
-?>
+	))); ?>
+    
+
+    
+<script type="text/javascript">
+formType()
+
+$("#FormAddForm").change( function() {
+	formType()
+})
+
+
+function formType() {
+	$("#FormName").parent().parent().hide();
+	$("#FormMethod").parent().parent().hide();
+	
+	var val = $("#FormCopy").val()
+	
+	if (val == "custom") {
+		$("#FormName").parent().parent().show()
+		$("#FormMethod").parent().parent().show()
+	}
+}		
+</script>

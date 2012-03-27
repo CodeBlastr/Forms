@@ -34,9 +34,7 @@
 	<th><?php echo $this->Paginator->sort('id');?></th>
 	<th><?php echo $this->Paginator->sort('name');?></th>
 	<th><?php echo $this->Paginator->sort('method');?></th>
-	<th><?php echo $this->Paginator->sort('plugin');?></th>
-	<th><?php echo $this->Paginator->sort('model');?></th>
-	<th><?php echo $this->Paginator->sort('action');?></th>
+	<th><?php echo $this->Paginator->sort('action', 'Handler');?></th>
 	<th class="actions"><?php echo __('Actions');?></th>
 </tr>
 <?php
@@ -58,17 +56,13 @@ foreach ($forms as $group):
 			<?php echo $group['Form']['method']; ?>
 		</td>
 		<td>
-			<?php echo $group['Form']['plugin']; ?>
-		</td>
-		<td>
-			<?php echo $group['Form']['model']; ?>
-		</td>
-		<td>
-			<?php echo $group['Form']['action']; ?>
+			<?php echo $group['Form']['plugin'] . '.' . $group['Form']['model'] . '::' . $group['Form']['action'] . '()'; ?>
 		</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $group['Form']['id'])); ?>
-			<?php echo $this->Html->link(__('View Form Fieldsets', true), array('controller' => 'form_fieldsets', 'action' => 'index', 'fieldset' => $group['Form']['id'])); ?>
+			<?php echo $this->Html->link(__('View'), array('action' => 'view', $group['Form']['id'])); ?>
+			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $group['Form']['id'])); ?>
+			<?php echo $this->Html->link(__('Add Fieldset'), array('controller' => 'form_fieldsets', 'action' => 'add', $group['Form']['id'])); ?>
+			<?php echo $this->Html->link(__('View Fieldsets', true), array('controller' => 'form_fieldsets', 'action' => 'index', $group['Form']['id'])); ?>
 			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $group['Form']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $group['Form']['id'])); ?>
 		</td>
 	</tr>
@@ -82,8 +76,7 @@ $this->set('context_menu', array('menus' => array(
 	array(
 		'heading' => 'Forms',
 		'items' => array(
-			$this->Html->link(__('Add', true), array('action' => 'add'), array('class' => 'add')),
+			$this->Html->link(__('Add'), array('action' => 'add'), array('class' => 'add')),
 			)
 		),
-	)));
-?>
+	))); ?>

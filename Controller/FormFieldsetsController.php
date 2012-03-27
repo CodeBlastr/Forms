@@ -26,15 +26,33 @@
 class FormFieldsetsController extends FormsAppController {
 
 	public $name = 'FormFieldsets';
+	
 	public $uses = 'Forms.FormFieldset';
 	
 
-	function index() {
+	public function index() {
 		$this->FormFieldset->recursive = 0;
 		$this->set('formFieldsets', $this->paginate());
 	}
 
-	function edit($id = null) {
+	public function add($formId = null) {
+		if (!empty($this->request->data)) {
+			if ($this->FormFieldset->save($this->request->data)) {
+				$this->Session->setFlash(__('The Fieldset has been saved', true));
+				$this->redirect(array('action'=>'index'));
+			} else {
+				$this->Session->setFlash(__('The Fieldset could not be saved. Please, try again.', true));
+			}
+		}
+		if (empty($this->request->data)) {
+			$this->request->data = $this->FormFieldset->read(null, $id);
+			$forms = $this->FormFieldset->Form->find('list');
+			$this->set(compact('forms'));
+		}
+		$this->set(compact('formId'));
+	}
+
+	public function edit($id = null) {
 		if (!empty($this->request->data)) {
 			if ($this->FormFieldset->save($this->request->data)) {
 				$this->Session->setFlash(__('The Fieldset has been saved', true));
@@ -50,7 +68,7 @@ class FormFieldsetsController extends FormsAppController {
 		}
 	}
 
-	function delete($id = null) {
+	public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for FormFieldset', true));
 			$this->redirect(array('action'=>'index'));

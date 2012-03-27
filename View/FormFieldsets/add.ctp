@@ -22,7 +22,7 @@
 ?>
 
 <div class="formFieldsets form">
-<h1><?php echo __('Edit Form Fieldset');?></h1>
+<h1><?php echo __('Add Form Fieldset');?></h1>
 <?php echo $this->Form->create('FormFieldset', array('action' => 'edit'));?>
 	<fieldset>
  		<legend><?php echo __('Fieldset');?></legend>

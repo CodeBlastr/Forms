@@ -22,10 +22,9 @@
  */
 class FormInput extends FormsAppModel {
 
-	var $name = 'FormInput';
+	public $name = 'FormInput';
 	
-	var $validate = array(
-		'form_fieldset_id' => array('numeric'),
+	public $validate = array(
 	    'code' => array(
 			'characterCheck' => array(
 		    	'rule' => '/^[a-z0-9_]{2,50}$/i',  
@@ -33,7 +32,7 @@ class FormInput extends FormsAppModel {
 				),
 			'firstCodeCheck' => array(
 				'rule' => array('_initialCodeCheck', 'is_duplicate'),
-				'message' => 'This code exists already, If this is not an error click submit again. Otherwise start over.',
+				'message' => 'Are you sure you want to use this name?  This field already exists in the database.',
 				'on' => 'create',
 				),
 	    	),
@@ -48,21 +47,36 @@ class FormInput extends FormsAppModel {
 		); 
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
-	var $belongsTo = array(
+	public $belongsTo = array(
 		'FormFieldset' => array(
 			'className' => 'Forms.FormFieldset',
 			'foreignKey' => 'form_fieldset_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
+		),
+		'Form' => array(
+			'className' => 'Forms.Form',
+			'foreignKey' => 'form_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 	);
+	
+	
+	public function beforeValidate() {
+		if (!empty($this->data['FormInput']['name']) && empty($this->data['FormInput']['code'])) {
+			$this->data['FormInput']['code'] = Inflector::underscore(strtolower($this->data['FormInput']['name']));
+		}
+	}
+	
 /** 
  * Handle the numerous tasks when adding a new form input, including altering the database.
  * 
  * @param {data} 			Data to parse and save.
  */
-	function add($data) {
+	public function add($data) {
 		if ($this->save($data)) {
 			if (!empty($data['FormInput']['is_duplicate'])) {
 				# validation checks to see if the field already exists, but that does not disqualify it from working, just need to throw a warning so the user can rename if they need to.
@@ -84,7 +98,11 @@ class FormInput extends FormsAppModel {
 				}
 			}
 		} else {
-			return false;
+			$errors = '';
+			foreach ($this->invalidFields() as $key => $error) :
+				$errors .= $error[0];
+			endforeach;
+			throw new Exception(__('%s', $errors));
 		}
 	}
 	
@@ -96,8 +114,9 @@ class FormInput extends FormsAppModel {
  * @return {bool} 	True if deleted, false if not.
  * @todo			Need to check if the column exists, because we don't need to alter table if it doesn't.
  * @todo			And change the order, we need to verify the table was alterned before we delete the input.
+ * @todo			Ummm, seems like we need to make it so that we don't go deleting necessary fields (like system fields)
  */
-	function remove($id) {
+	public function remove($id) {
 		# setup the values for deleting the field itself too
 		$formInput = $this->findbyId($id);
 		$this->FormFieldset->id = $formInput['FormInput']['form_fieldset_id'];
@@ -131,7 +150,7 @@ class FormInput extends FormsAppModel {
  * @param {options] 	Additional directions for what formInputs to find.
  * @return 				The optionally limited formInputs for the specified model. 
  */
-	function getFormInputs($model, $typeId = null, $options = null) {		
+	public function getFormInputs($model, $typeId = null, $options = null) {		
 		$formFieldsets = $this->FormFieldset->getFormFieldsets($model, $typeId);
 		foreach ($formFieldsets as $formFieldset) {
 			$formFieldsetIds[] = $formFieldset['FormFieldset']['id'];
@@ -154,8 +173,8 @@ class FormInput extends FormsAppModel {
  * @todo				Add some type of error check for whether those two required data points exist.
  * @todo				Generalize and move to app model if its needed in any other model.
  */
-	function _checkFieldExistence($formInput) {
-		$tableName = $this->_getFieldInputTable($formInput['form_fieldset_id'], $formInput['model_override']);
+	protected function _checkFieldExistence($formInput) {
+		$tableName = $this->_getFieldInputTable($formInput['form_id'], $formInput['model_override']);
 		$fieldName = $formInput['code'];
 		$fieldSearch = $this->query('SHOW columns FROM '.$tableName.' LIKE "'.$fieldName.'"');
 		
@@ -175,10 +194,10 @@ class FormInput extends FormsAppModel {
  * @param {override}	An optional override model name.
  * @return {string}		A properly formatted table name.
  */
-	function _getFieldInputTable($fieldsetId, $override = null) {
+	protected function _getFieldInputTable($fieldsetId, $override = null) {
 		# get the default model name from the fieldset
-		$this->FormFieldset->id = $fieldsetId;
-		$modelName = $this->FormFieldset->field('model');
+		$this->Form->id = $fieldsetId;
+		$modelName = $this->Form->field('model');
 		
 		# check to see if the fieldset model was over ridden by the input 
 		if (!empty($override)) {
@@ -198,7 +217,7 @@ class FormInput extends FormsAppModel {
  * @todo				Add some type of error check for whether those two required data points exist.
  * @todo				Generalize and move to app model if its needed in any other model.
  */
-	function _initialCodeCheck($code){
+	protected function _initialCodeCheck($code){
 		if (!empty($this->data['FormInput']['is_duplicate'])) {
 			return true;
 		} else {
@@ -219,7 +238,7 @@ class FormInput extends FormsAppModel {
  * @param {model}		The model (database table) to check for existence.
  * @return {string}		Returns the table name if it exists, otherwise false.
  */
-	function _checkTableExistence($model) {
+	protected function _checkTableExistence($model) {
 		$tableName = Inflector::underscore(Inflector::pluralize($model));
 		# this checks to see if a table with this name exists.
 		$tableSearch = $this->query('SHOW columns FROM '.$tableName);
@@ -238,9 +257,9 @@ class FormInput extends FormsAppModel {
  * @param {fmInputId}		The id of the formInput being saved
  * @todo					Simplify and break up the multiple actions going on within this function.
  */
-	function _addField($data) {
+	protected function _addField($data) {
 		# get the field set info
-		$model = $this->_getFieldInputTable($data['form_fieldset_id'], $data['model_override']);
+		$model = $this->_getFieldInputTable($data['form_id'], $data['model_override']);
 		if($tableName = $this->_checkTableExistence($model)) {
 			# it exists so we'll alter the existing table
 			return $this->_alterTable($tableName, $data);
@@ -260,7 +279,7 @@ class FormInput extends FormsAppModel {
  * @param {fieldQuery}		The sub query from buildQuery
  * @return {string}			Returns the table name created, or false.				
  */
-	function _createTable($model) {
+	protected function _createTable($model) {
 		$tableName = Inflector::tableize($model);
 		# add a new table
 		$query = 'CREATE TABLE IF NOT EXISTS `'.$tableName.'` ( `id` INT( 11 ) NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
@@ -280,7 +299,7 @@ class FormInput extends FormsAppModel {
  * @param {fieldQuery}		The sub query from buildQuery
  * @return {bool}			True on success of new table creation		
  */
-	function _alterTable($tableName, $data) {
+	protected function _alterTable($tableName, $data) {
 		# set the field settings
 		$fieldType = $this->_getFieldType($data['input_type']);
 		$nullStatus = $this->_getNullStatus($data['is_required']);
@@ -305,7 +324,7 @@ class FormInput extends FormsAppModel {
  * @param {type}		The type of input field
  * @return {string}		A mysql database field type snippet.
  */
-	function _getFieldType($type) {
+	protected function _getFieldType($type) {
 		/*
 		$this->data['input_type'] values
 		text = 'VARCHAR'
@@ -361,7 +380,7 @@ class FormInput extends FormsAppModel {
  * @param {isRequired}	0 or 1
  * @return {string}		A mysql null snippet
  */
-	function _getNullStatus($isRequired = null) {
+	protected function _getNullStatus($isRequired = null) {
 		# set up the NULL value for the database field based on if its required or not
 		if ($isRequired == 1) {
 			return ' NOT NULL ';
@@ -378,7 +397,7 @@ class FormInput extends FormsAppModel {
  * @param {defaultValue}The default value for this field
  * @return {string}		A mysql default query snippet
  */
-	function _getDefault($defaultValue = null) {
+	protected function _getDefault($defaultValue = null) {
 		# input the DEFAULT value if it exists
 		if ($defaultValue == null) {
 			return ' ';
@@ -396,7 +415,7 @@ class FormInput extends FormsAppModel {
  * @param {isUnique}	Whether the field is unique or not
  * @return {string}		A mysql unique key snippet
  */
-	function _getUniqueKey($fieldName, $isUnique = null) {
+	protected function _getUniqueKey($fieldName, $isUnique = null) {
 		# set up the UNIQUE index if it is a unique field
 		if ($isUnique == 1) {
 			return ' , ADD UNIQUE (`'.$fieldName.'`) ';
@@ -411,7 +430,7 @@ class FormInput extends FormsAppModel {
  *
  * @return {array}		An array of form input types.
  */
-	function inputTypes() {
+	public function inputTypes() {
 		return array(
 				'text' => 'text',
 				'textarea' => 'textarea',
@@ -425,6 +444,16 @@ class FormInput extends FormsAppModel {
 				'password' => 'password',
 				'file' => 'file',
 				);
+	}
+	
+/**
+ * Available default values
+ */
+	public function systemDefaultValues () {
+		return array(
+			'custom' => 'Custom',
+			'current user' => 'Current User',
+			);
 	}
 			
 	

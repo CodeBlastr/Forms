@@ -29,13 +29,87 @@ class FormsController extends FormsAppController {
 	public $uses = 'Forms.Form';
 	public $allowedActions = array('display', 'process');
 
+	public function index() {
+		$this->Form->recursive = 0;
+		$this->set('forms', $this->paginate());
+	}
+
+	public function add() {
+		if (!empty($this->request->data)) {
+			if ($this->Form->add($this->request->data)) {
+				$this->Session->setFlash(__('The Form has been saved', true));
+				$this->redirect(array('action'=>'index'));
+			} else {
+				$this->Session->setFlash(__('The Form could not be saved. Please, try again.', true));
+			}
+		}
+		
+		$this->set('methods', $this->Form->methods()); 
+	}
+
+/**
+ * View method
+ *
+ */
+	public function view($id = null) {
+		$this->Form->id = $id;
+		if (!$this->Form->exists()) {
+			throw new NotFoundException(__('Invalid form.'));
+		}
+		$this->set(compact('id'));
+	}
+
+/**
+ * Edit method
+ *
+ */
+	public function edit($id = null, $formInputId = null) {
+		$this->Form->id = $id;
+		if (!$this->Form->exists()) {
+			throw new NotFoundException(__('Invalid form.'));
+		}
+		
+			
+		if (!empty($this->request->data['FormInput'])) {
+			# create the formInput
+			try {
+				$this->Form->FormInput->add($this->request->data);
+				$this->Session->setFlash(__('Input Successfully Added!'));
+				$this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
+			} catch (Exception $e) {
+				$this->Session->setFlash($e->getMessage());
+				$this->set('duplicate', true);
+			}
+		} 
+		
+		if (!empty($this->request->data['Form'])) {
+			try {
+				$this->Form->add($this->request->data);
+				$this->Session->setFlash(__('The Form has been saved', true));
+				$this->redirect(array('action'=>'index'));
+			} catch (Exception $e) {
+				$this->Session->setFlash(__('The Form could not be saved. Please, try again.'));
+			}
+		}
+		$formInput = !empty($formInputId) ? $this->Form->FormInput->read(null, $formInputId) : array();
+		$this->request->data = array_merge($this->Form->read(null, $id), $formInput, $this->request->data);
+		$this->set('methods', $this->Form->methods()); 
+		$this->set('inputTypes', $this->Form->FormInput->inputTypes());
+		$this->set('systemDefaultValues', $this->Form->FormInput->systemDefaultValues());
+	}
+
 /**
  * Used to display a form using requestAction in the default layout.
  *
  * @param {id}			The form id to call.
  * @return {formInputs}	Form elements within the requested fieldsets.
  */
-	function display($id, $type = 'add') {
+	public function display($id, $type = 'add') {
+		$this->Form->id = $id;
+		if (!$this->Form->exists()) {
+			throw new NotFoundException(__('Invalid form.'));
+		}
+		
 		$formGroup = $this->Form->display($id, $type);
 		if (!empty($formGroup) && isset($this->request->params['requested'])) {
 			$formGroup = array_merge($formGroup, $this->_specialData()); 
@@ -45,18 +119,18 @@ class FormsController extends FormsAppController {
 		}
 	}
 	
-	function _specialData() {
+	protected function _specialData() {
 		return array('user_id' => $this->Session->read('Auth.User.id'));
 	}
 	
 	
-	/**
-	 * Takes a custom form and processes it using the model->action from the form settings.
-	 * 
-	 * @todo		This could probably be moved to the Form model.
-	 * @todo		The duplication of the failures is probably a logic error that can be fixed or at least put into a separate function.
-	 */
-	function process() {
+/**
+ * Takes a custom form and processes it using the model->action from the form settings.
+ * 
+ * @todo		This could probably be moved to the Form model.
+ * @todo		The duplication of the failures is probably a logic error that can be fixed or at least put into a separate function.
+ */
+	public function process() {
 		$this->Session->delete('errors');
 		if (!empty($this->request->data)) {
 			$plugin = $this->request->data['Form']['plugin'];
@@ -143,37 +217,4 @@ class FormsController extends FormsAppController {
 		}
 	}	
 
-	function index() {
-		$this->Form->recursive = 0;
-		$this->set('forms', $this->paginate());
-	}
-
-	function add() {
-		if (!empty($this->request->data)) {
-			if ($this->Form->add($this->request->data)) {
-				$this->Session->setFlash(__('The Form has been saved', true));
-				$this->redirect(array('action'=>'index'));
-			} else {
-				$this->Session->setFlash(__('The Form could not be saved. Please, try again.', true));
-			}
-		}
-		
-		$this->set('methods', array('post' => 'post', 'get' => 'get', 'file' => 'file', 'put' => 'put', 'delete' => 'delete')); 
-	}
-
-	function edit($id = null) {
-		if (!empty($this->request->data)) {
-			if ($this->Form->add($this->request->data)) {
-				$this->Session->setFlash(__('The Form has been saved', true));
-				$this->redirect(array('action'=>'index'));
-			} else {
-				$this->Session->setFlash(__('The Form could not be saved. Please, try again.', true));
-			}
-		}
-		
-		$this->request->data = $this->Form->read(null, $id);
-		$this->set('methods', array('post' => 'post', 'get' => 'get', 'file' => 'file', 'put' => 'put', 'delete' => 'delete')); 
-	}
-
 }
-?>

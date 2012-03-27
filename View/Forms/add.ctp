@@ -26,6 +26,12 @@
 <h1><?php echo __('Create a Form');?></h1>
 <?php echo $this->Form->create('Form');?>
 	<fieldset>
+ 		<legend><?php echo __('Make a Copy');?></legend>
+	<?php
+		echo $this->Form->input('Form.copy'); 
+	?>
+    </fieldset>
+	<fieldset>
  		<legend><?php echo __('Add Form');?></legend>
 	<?php
 		echo $this->Form->input('Form.id');
@@ -33,7 +39,7 @@
 	?>
     </fieldset>
     <fieldset>
-    	<legend><?php echo __('Settings');?></legend>
+    	<legend><?php echo __('Advanced Settings');?></legend>
      <?php
 		echo $this->Form->input('Form.method');
 		echo $this->Form->input('Form.action', array('placeholder' => ' (ex: add, edit, view, save, remove)'));

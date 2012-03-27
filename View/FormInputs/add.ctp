@@ -18,8 +18,7 @@
  * @subpackage    zuha.app.plugins.forms.views
  * @since         Zuha(tm) v 0.0.1
  * @license       GPL v3 License (http://www.gnu.org/licenses/gpl.html) and Future Versions
- */
-?>
+ */ ?>
 
 <div class="formInputs form">
 	<fieldset>
@@ -124,6 +123,7 @@
 	?>
 	</fieldset>
 <?php echo $this->Form->end('Submit');?>
+	</fieldset>
 </div>
 <?php
 // set the contextual menu items

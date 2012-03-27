@@ -26,6 +26,7 @@
 <?php
 #call the form display function using the form id, and the type in this format : x/type (ex. 4/view, or 17/add).
 $groups = $this->requestAction('/forms/forms/display/'.$id);
+$preview = !empty($preview) ? $preview : false;
 
 
 
@@ -47,6 +48,7 @@ if (strpos($id, 'view') > -1) {
 		?>
         </ul>
       <?php
+	  
 	}
 
 
@@ -125,6 +127,7 @@ foreach ($groups['FormFieldset'] as $fieldset) {
 ?>
   </fieldset>
   <?php
+  
 }
 #close the form and show the submit button
 echo $this->Form->end('Submit');
@@ -143,7 +146,8 @@ echo $this->Form->end('Submit');
 #display the add type by default
 } else {
 	# set the form variables in the case of an error
-	$this->Form->data = $this->Session->read();
+	$formData = $this->Session->read();
+	$this->Form->data = !empty($formData['Form']) ? $formData : $this->Form->data;
 	$this->Form->validationErrors = $this->Session->read('errors');
 
 	# initialize the form open tag
@@ -156,83 +160,39 @@ echo $this->Form->end('Submit');
 	echo $this->Form->input('Form.fail_message', array('type' => 'hidden', 'value' => $groups['Form']['fail_message']));
 	echo $this->Form->input('Form.fail_url', array('type' => 'hidden', 'value' => $groups['Form']['fail_url']));
 
-	foreach ($groups['FormFieldset'] as $fieldset) {
-	?>
-
-	<fieldset id="fieldset<?php echo $fieldset['id']; ?>">
-	<?php echo (!empty($fieldset['legend']) ? '<legend>'.$fieldset['legend'].'</legend>' : ''); ?>
-    <?php
-		$i = 0;
-		foreach ($fieldset['FormInput'] as $input) {
-			$multiple = !empty($input['multiple']) ? array('multiple' => $input['multiple']) : array();
-			$optionValues = !empty($input['option_values']) ? preg_split('/[\n\r]+/', $input['option_values']) : array();
-			$optionNames = !empty($input['option_names']) ? preg_split('/[\n\r]+/', $input['option_names']) : array();
-			$options = !empty($optionValues) && !empty($optionNames) ? array_combine($optionValues, $optionNames) : array();
-			$model = !empty($input['model_override']) ? $input['model_override'] : $fieldset['model'];
-			$ckeSettings = $input['input_type'] == 'richtext' ? array('buttons' => array('Bold','Italic','Underline','FontSize','TextColor','BGColor','-','NumberedList','BulletedList','Blockquote','JustifyLeft','JustifyCenter','JustifyRight','-','Link','Unlink','-', 'Image')) : null;
-			$empty = !empty($input['empty_text']) ? array('empty' => $input['empty_text']) : array();
-			$separator = !empty($input['separator']) ? array('separator' => $input['separator']) : array();
-			$legend = !empty($input['legend']) ? array('legend' => $input['legend']) : array();
-			$timeFormat = !empty($input['time_format']) ? array('time_format' => $input['time_format']) : array();
-			$dateFormat = !empty($input['date_format']) ? array('date_format' => $input['date_format']) : array();
-			$divId = !empty($input['div_id']) ? array('id' => $input['div_id']) : array();
-			$divClass = !empty($input['div_class']) ? array('class' => $input['div_class']) : array();
-            $label = ($input['show_label'] == 1) ? $input['name'] : false;
-			if(!empty($divClass) && !empty($divId)) {
-              $divOptions = array_merge($divId, $divClass);
-            } else {
-              if(empty($divClass)) $divOptions = $divId;
-              elseif(empty ($divId)) $divOptions = $divClass;
-            }
-            if(empty($divOptions)) $divOptions = null;
-			$isRequired = !empty($input['is_required']) ? 'required' : null;
-			$validationType = !empty($input['validation']) ? $input['validation'] : null;
-			# special field values
-			if (!empty($input['system_default_value'])) {
-				if ($input['system_default_value'] == 'current user') {
-					$defaultValue = $groups['user_id'];
-				} else {
-					$defaultValue = $input['default_value'];
-				}
-			} else {
-				$defaultValue = $input['default_value'];
-			}
-			$options = array_merge(array(
-				'type' => $input['input_type'],
-				'label' => $label,
-				'default' => $defaultValue,
-				'selected' => $defaultValue,
-				'options' => $options,
-				'before' => $input['before'],
-				'between' => $input['between'],
-				'after' => $input['after'],
-				'minLength' => $input['min_length'],
-				'maxLength' => $input['max_length'],
-				'rows' => $input['rows'],
-				'cols' => $input['columns'],
-				'minYear' => $input['min_year'],
-				'maxYear' => $input['max_year'],
-				'interval' => $input['minute_interval'],
-				//'div' =>  $divOptions,
-				'ckeSettings' => $ckeSettings,
-                'placeholder' => $input['placeholder'],
-				'hiddenField' => false, // this was needed to make checkbox validation work because of name conflicts
-				'class' => $isRequired.' '.$validationType,
-				), $multiple, $separator, $legend, $empty, $timeFormat, $dateFormat);
-            if($divOptions !== null) $options['div'] = $divOptions;
-			echo $this->Form->input($model.'.'.$input['code'], $options);
-		}
-		?>
-		</fieldset>
+	if (!empty($groups['FormFieldset'])) {
+		foreach ($groups['FormFieldset'] as $fieldset) { ?>
+		<fieldset id="fieldset<?php echo $fieldset['id']; ?>">
+			<?php 
+			echo (!empty($fieldset['legend']) ? '<legend>'.$fieldset['legend'].'</legend>' : '');
+			foreach ($fieldset['FormInput'] as $input) {
+				echo $this->Element('form_inputs', array('input' => $input, 'fieldset' => $fieldset, 'preview' => $preview), array('plugin' => 'forms'));
+			} ?>
+	    </fieldset>
 		<?php
+		} // end fieldset loop
+	} else if (!empty($groups['FormInput'])) {
+		foreach ($groups['FormInput'] as $input) {
+			echo $this->Element('form_inputs', array('input' => $input, 'fieldset' => $groups['Form'], 'preview' => $preview), array('plugin' => 'forms'));
+		}
 	}
+	
 	#close the form and show the submit button
 	echo $this->Form->end('Submit');
-} // end the else which display the add type of form
-?>
+} // end the else which display the add type of form ?>
 </div>
 
 <script src="/js/system/jquery.validate.min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
-$("#addForm").validate();
+$("#addForm").validate({
+	submitHandler: function(form) {
+		<?php if (!empty($preview)) { ?>
+		$(".formPreview").prepend("<div class='message'>This is a preview, otherwise the form would have passed validation and been submitted.</div>")
+		return false
+		<?php } else { ?>
+		form.submit()
+		<?php } ?>
+	}
+})
 </script>

@@ -25,6 +25,7 @@
 class FormInputsController extends FormsAppController {
 
 	public $name = 'FormInputs';
+	
 	public $uses = 'Forms.FormInput';
 
 
@@ -32,7 +33,7 @@ class FormInputsController extends FormsAppController {
  * Gives us filtered and paginated results for all formInputs. 
  * 
  */
-	function index() {
+	public function index() {
 		$this->FormInput->recursive = 0;		
 		$this->set('formInputs', $this->paginate());
 	}
@@ -45,14 +46,15 @@ class FormInputsController extends FormsAppController {
  * @todo 			formInputs need all the form options that cakephp has, so that you can easily make a database driven form
  * @todo			Move the second part of this save to the model, so that it is simply part of the save operation, and can be reused.
  */
-	function add() {
-		if (!empty($this->request->data)) {
+	public function add() {
+		if (!empty($this->request->data['FormInput'])) {
 			# create the formInput
-			if($this->FormInput->add($this->request->data)) {
-				$this->Session->setFlash(__('Input Successfully Added!', true));
-				$this->redirect(array('action'=>'index'));
-			} else {
-				$this->set('duplicate', true);
+			try {
+				$this->Form->FormInput->add($this->request->data);
+				$this->Session->setFlash(__('Input Successfully Added!'));
+				$this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
+			} catch (Exception $e) {
+				$this->Session->setFlash($e->getMessage());
 			}
 		}
 		
@@ -60,6 +62,7 @@ class FormInputsController extends FormsAppController {
 		$formFieldsets = $this->FormInput->FormFieldset->find('list');
 		$this->set(compact('formFieldsets'));
 		$this->set('inputTypes', $this->FormInput->inputTypes());
+		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
 	}
 
 /**
@@ -71,7 +74,7 @@ class FormInputsController extends FormsAppController {
  * @todo			Overall this function is just too "fat" it needs to be trimmed down, and make the model fat instead.
  * @todo			Move the second part of this save to the model, so that it is simply part of the save operation, and can be reused.
  */
-	function edit($id = null) {
+	public function edit($id = null) {
 		if (!empty($this->request->data)) {
 			# create the formInput
 			if($this->FormInput->save($this->request->data)) {
@@ -87,10 +90,11 @@ class FormInputsController extends FormsAppController {
 		$formFieldsets = $this->FormInput->FormFieldset->find('list');
 		$this->set(compact('formFieldsets'));
 		$this->set('inputTypes', $this->FormInput->inputTypes());
+		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
 	}
 
 
-	function delete($id = null) {
+	public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Form Input', true));
 			$this->redirect(array('action'=>'index'));

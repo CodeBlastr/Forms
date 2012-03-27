@@ -21,14 +21,15 @@
  */
 class Form extends FormsAppModel {
 
-	var $name = 'Form';	
-	var $validate = array(
+	public $name = 'Form';	
+	
+	public $validate = array(
 		'name' => array('notempty'),
 		'model' => array('notempty'),
 	);
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
-	var $hasMany = array(
+	public $hasMany = array(
 		'FormFieldset' => array(
 			'className' => 'Forms.FormFieldset',
 			'foreignKey' => 'form_id',
@@ -41,8 +42,21 @@ class Form extends FormsAppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		)
-	);
+			),
+		'FormInput' => array(
+			'className' => 'Forms.FormInput',
+			'foreignKey' => 'form_id',
+			'dependent' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+			),
+		);
 	
 
 /**
@@ -50,7 +64,7 @@ class Form extends FormsAppModel {
  *
  * @param {data} 		The $this->data array.
  */
-	function add($data) {
+	public function add($data) {
 		# create the form url convenience field
 		$plugin = Inflector::underscore(Inflector::pluralize($data['Form']['plugin']));
 		$controller = Inflector::underscore(Inflector::pluralize($data['Form']['model']));
@@ -70,7 +84,7 @@ class Form extends FormsAppModel {
  * @param {type}		valid values are add, edit, view
  * @return {array}		the data pulled from the db
  */
-	function display($id, $type = 'add') { 
+	public function display($id, $type = 'add') { 
 		if ($type == 'edit') {
 			$inputConditions = array('FormInput.is_editable' => 1);
 		} else if ($type == 'view') {
@@ -101,6 +115,10 @@ class Form extends FormsAppModel {
 						'order' => 'FormInput.order',
 						),
 					),
+				'FormInput' => array(
+					'conditions' => $inputConditions,
+					'order' => 'FormInput.order',
+					),
 				),
 			));	
 		if (!empty($formGroup)) {
@@ -110,6 +128,19 @@ class Form extends FormsAppModel {
 		}
 	}
 	
-	
+/**
+ * Available form methods
+ *
+ * @return array
+ */
+	public function methods() {
+		return array(
+			'post' => 'post', 
+			'get' => 'get', 
+			'file' => 'file', 
+			'put' => 'put', 
+			'delete' => 'delete'
+			);
+	}
+		
 }
-?>

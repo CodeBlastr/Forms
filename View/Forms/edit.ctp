@@ -226,6 +226,7 @@ function defaultValue() {
 
 <style type="text/css">
 /*  Move this to mobi when done!!! */
+/* Make sure we move this right after the repo update */
 input[type=checkbox] {
 	margin: 4px 6px 7px 0;
 }
@@ -252,5 +253,5 @@ form .editFormSpan .editFormInput {
 	width: 23px;
 	height: 23px;
 	background: url('/img/admin/icons/icon-sprite.png') -581px -116px no-repeat;
-}
+} 
 </style>

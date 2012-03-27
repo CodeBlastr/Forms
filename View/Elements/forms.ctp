@@ -152,6 +152,7 @@ echo $this->Form->end('Submit');
 
 	# initialize the form open tag
 	echo $this->Form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method'], 'id' => 'addForm'));
+	echo $this->Form->input('Form.id', array('type' => 'hidden', 'value' => $groups['Form']['id']));
 	echo $this->Form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin']));
 	echo $this->Form->input('Form.model', array('type' => 'hidden', 'value' => $groups['Form']['model']));
 	echo $this->Form->input('Form.action', array('type' => 'hidden', 'value' => $groups['Form']['action']));

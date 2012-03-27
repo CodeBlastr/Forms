@@ -129,6 +129,32 @@ class Form extends FormsAppModel {
 	}
 	
 /**
+ * Pull up a form and notify notifiees
+ * 
+ * @return bool
+ */
+	public function notify($data = null) {
+		if (!empty($data['Form']['id'])) {
+			$form = $this->find('first', array(
+				'conditions' => array(
+					'Form.id' => $data['Form']['id'],
+					),
+				));
+			if (!empty($form['Form']['notifiees'])) {
+				$notifiees = explode(',', str_replace(' ', '', $form['Form']['notifiees']));
+				foreach ($notifiees as $recipient) {
+					$message = $data;
+					unset($message['Form']);
+					$message = print_r($message, true);
+					$this->__sendMail($recipient, 'Form submission', $message);
+				}
+			}
+		} else {
+			throw new Exception(__('Form id is null, cannot check notifications.'));
+		}
+	}
+	
+/**
  * Available form methods
  *
  * @return array

@@ -132,7 +132,7 @@ class FormsController extends FormsAppController {
  */
 	public function process() {
 		$this->Session->delete('errors');
-		if (!empty($this->request->data)) {
+		if (!empty($this->request->data)) {			
 			$plugin = $this->request->data['Form']['plugin'];
 			$modelName = $this->request->data['Form']['model'];
 			$action = $this->request->data['Form']['action'];
@@ -141,14 +141,16 @@ class FormsController extends FormsAppController {
 			# validates the data before trying to run the action
 			# previously this was just $this->request->data but was changed to $this->request->data[$modelName] because 
 			# I could not figure out why the category data was causing a validation failure 4/22/2011 RK
+			$this->Form->notify($this->request->data);
+			break;
 			if ($Model->saveAll($this->request->data[$modelName], array('validate' => 'only'))) {
 				try {
 					$result = $Model->$action($this->request->data);
-					if ($result) {
+					if ($result && $this->Form->notify($this->request->data)) {
 						if (!empty($this->request->data['Form']['success_message'])) {
 							$this->Session->setFlash($this->request->data['Form']['success_message'], true);
 						} else {
-							$this->Session->setFlash(__('Success!', true));
+							$this->Session->setFlash(__('Success!'));
 						}
 						if (!empty($this->request->data['Form']['success_url'])) {
 							$this->redirect($this->request->data['Form']['success_url']);

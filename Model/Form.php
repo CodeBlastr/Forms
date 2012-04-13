@@ -236,6 +236,17 @@ class Form extends FormsAppModel {
 			$contact['FormInput'][4]['is_addable'] = 1;
 			$contact['FormInput'][4]['is_editable'] = 1;
 			
+			$contact['FormInput'][5]['code'] = 'current_page_url';
+			$contact['FormInput'][5]['name'] = 'Page URL';
+			$contact['FormInput'][5]['model_override'] = 'ContactDetail.1';
+			$contact['FormInput'][5]['input_type'] = 'hidden';
+			$contact['FormInput'][5]['system_default_value'] = 'current page url';
+			$contact['FormInput'][5]['is_required'] = 0;
+			$contact['FormInput'][5]['is_not_db_field'] = 1;
+			$contact['FormInput'][5]['is_visible'] = 1;
+			$contact['FormInput'][5]['is_addable'] = 1;
+			$contact['FormInput'][5]['is_editable'] = 1;			
+			
 			return $this->saveAll($contact, array('validate' => false));
 		}
 	}

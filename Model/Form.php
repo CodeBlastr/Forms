@@ -245,7 +245,7 @@ class Form extends FormsAppModel {
 			$contact['FormInput'][5]['is_not_db_field'] = 1;
 			$contact['FormInput'][5]['is_visible'] = 1;
 			$contact['FormInput'][5]['is_addable'] = 1;
-			$contact['FormInput'][5]['is_editable'] = 1;			
+			$contact['FormInput'][5]['is_editable'] = 1;	
 			
 			return $this->saveAll($contact, array('validate' => false));
 		}

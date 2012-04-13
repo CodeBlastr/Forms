@@ -27,7 +27,7 @@ $validationType = !empty($input['validation']) ? $input['validation'] : null;
 # special field values
 if (!empty($input['system_default_value'])) {
 	if ($input['system_default_value'] == 'current user') {
-		$defaultValue = $groups['user_id'];
+		$defaultValue = $groups['user_id'];	
 	} else if ($input['system_default_value'] == 'current page url') {
 		if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_URI'])) {
 			$defaultValue = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];

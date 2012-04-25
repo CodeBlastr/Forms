@@ -23,9 +23,8 @@
 
 <div class="forms form">
     <h3><?php echo __('Form preview'); ?></h3>
-	<div class="formPreview" style="border: 1px dashed #999; padding: 1em 1em 3em 1em;"><!-- move to system.css, inline due to repo updates -->
-	<?php echo $this->Element('forms', array('id' => $this->request->data['Form']['id'], 'preview' => true), array('plugin' => 'forms')); ?>
-    </div>
+	<div class="preview formPreview"><?php echo $this->Element('forms', array('id' => $this->request->data['Form']['id'], 'preview' => true), array('plugin' => 'forms')); ?></div>
+    
 	<?php echo $this->Form->create('Form');?>
 	<fieldset>
     	<legend class="toggleClick"><?php echo __('Edit %s Settings', $this->request->data['Form']['name']);?></legend>

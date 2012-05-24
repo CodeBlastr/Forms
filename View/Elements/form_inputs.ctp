@@ -27,7 +27,7 @@ $validationType = !empty($input['validation']) ? $input['validation'] : null;
 # special field values
 if (!empty($input['system_default_value'])) {
 	if ($input['system_default_value'] == 'current user') {
-		$defaultValue = $groups['user_id'];	
+		$defaultValue = $groups['user_id'];
 	} else if ($input['system_default_value'] == 'current page url') {
 		if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_URI'])) {
 			$defaultValue = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -62,6 +62,8 @@ $options = array_merge(array(
 	'hiddenField' => false, // this was needed to make checkbox validation work because of name conflicts
 	'class' => $isRequired.' '.$validationType,
 	), $multiple, $separator, $legend, $empty, $timeFormat, $dateFormat);
+
 if($divOptions !== null) $options['div'] = $divOptions;
+if(!empty($preview)) $options['id'] = $input['id'];
 
 echo $this->Form->input($model.'.'.$input['code'], $options); ?>

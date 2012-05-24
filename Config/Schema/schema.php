@@ -1,4 +1,4 @@
-<?php 
+<?php
 class FormsSchema extends CakeSchema {
 
 	public $renames = array();
@@ -8,7 +8,7 @@ class FormsSchema extends CakeSchema {
 	}
 
 	public function before($event = array()) {
-		App::uses('UpdateSchema', 'Model'); 
+		App::uses('UpdateSchema', 'Model');
 		$this->UpdateSchema = new UpdateSchema;
 		$before = $this->UpdateSchema->before($event);
 		return $before;
@@ -98,6 +98,9 @@ class FormsSchema extends CakeSchema {
 		'action' => array('type' => 'string', 'null' => false, 'default' => 'add', 'length' => 10, 'collate' => 'utf8_general_ci', 'comment' => 'Valid values are add, edit, view - default add', 'charset' => 'utf8'),
 		'url' => array('type' => 'string', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'comment' => 'hidden from editing, auto created from other inputs', 'charset' => 'utf8'),
 		'notifiees' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'mail_to_field_name_id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 36, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'response_subject' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 255, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'response_body' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'success_message' => array('type' => 'string', 'null' => false, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'success_url' => array('type' => 'string', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'fail_message' => array('type' => 'string', 'null' => false, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),

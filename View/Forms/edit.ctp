@@ -13,7 +13,7 @@
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2012, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaï¿½ Project
  * @package       zuha
  * @subpackage    zuha.app.plugins.forms.views
  * @since         Zuha(tm) v 0.0.1
@@ -24,7 +24,7 @@
 <div class="forms form">
     <h3><?php echo __('Form preview'); ?></h3>
 	<div class="preview formPreview"><?php echo $this->Element('forms', array('id' => $this->request->data['Form']['id'], 'preview' => true), array('plugin' => 'forms')); ?></div>
-    
+
 	<?php echo $this->Form->create('Form');?>
 	<fieldset>
     	<legend class="toggleClick"><?php echo __('Edit %s Settings', $this->request->data['Form']['name']);?></legend>
@@ -32,15 +32,25 @@
 		echo $this->Form->input('Form.id');
 		echo $this->Form->input('Form.name');
 		echo $this->Form->input('Form.method');
-		echo $this->Form->input('Form.plugin'); 
-		echo $this->Form->input('Form.model', array('placeholder' => 'Camel case model name' )); 
+		echo $this->Form->input('Form.plugin');
+		echo $this->Form->input('Form.model', array('placeholder' => 'Camel case model name' ));
 		echo $this->Form->input('Form.action', array('placeholder' => 'Ex. add, edit, view, save, remove'));
-		echo $this->Form->input('Form.success_message'); 
-		echo $this->Form->input('Form.success_url'); 
-		echo $this->Form->input('Form.fail_message'); 
+		echo $this->Form->input('Form.success_message');
+		echo $this->Form->input('Form.success_url');
+		echo $this->Form->input('Form.fail_message');
 		echo $this->Form->input('Form.fail_url');
 		echo $this->Form->input('Form.notifiees', array('type' => 'text', 'label' => 'Email(s) to notify of submissions', 'placeholder' => 'Separate emails by commas'));
-		echo $this->Form->end('Submit'); ?>
+        ?>
+        <fieldset>
+          <legend class="toggleClick"><?php echo __('Configure Email Auto-Responder');?></legend>
+          <?php
+          echo $this->Form->input('Form.mail_to_field_name_id'); // bad name, need to think of something better, and it would be a list of fields (so this can only be on the edit form page)
+          echo $this->Form->input('Form.response_subject');
+          echo $this->Form->input('Form.response_body', array('type' => 'richtext', 'ckeSettings' => null));
+          ?>
+        </fieldset>
+        <?php
+        echo $this->Form->end('Submit'); ?>
 	</fieldset>
 </div>
 
@@ -55,7 +65,7 @@
 		echo $this->Form->hidden('FormInput.is_visible', array('value' => 1));
 		echo $this->Form->hidden('FormInput.is_addable', array('value' => 1));
 		echo $this->Form->hidden('FormInput.is_editable', array('value' => 1));
-		
+
 		echo (isset($duplicate) ? $this->Form->input('FormInput.is_duplicate', array('type' => 'hidden', 'value' => '1')) : '');
 		echo $this->Form->input('FormInput.name', array('label' => 'Label'));
 		echo $this->Form->input('FormInput.input_type');
@@ -135,7 +145,7 @@
 </div>
 
 
-<?php 
+<?php
 // set the contextual menu items
 $this->set('context_menu', array('menus' => array(
 	array(
@@ -159,12 +169,13 @@ $this->set('context_menu', array('menus' => array(
 			)
 		),
 	))); ?>
-    
+
 <script type="text/javascript">
 advancedOptions()
 databaseOptions()
 requiredOptions()
 defaultValue()
+generateSelectOptions()
 
 $("#FormInputEditForm").change( function() {
 	advancedOptions()
@@ -179,9 +190,9 @@ function advancedOptions() {
 	$("#FormInputRows").parent().parent().hide();
 	$("#FormInputLegend").parent().parent().hide();
 	$("#FormInputTimeFormat").parent().parent().hide();
-	
+
 	var val = $("#FormInputInputType").val()
-	
+
 	if (val == "text") {
 		$("#FormInputMinLength").parent().parent().show()
 	}
@@ -219,5 +230,19 @@ function defaultValue() {
 	if ($("#FormInputSystemDefaultValue").val() == "custom") {
 		$("#FormInputDefaultValue").parent().show()
 	}
-}		
+}
+
+function generateSelectOptions() {
+  // Options for #FormMailToFieldNameId
+  $(".formPreview input").each(function(i) {
+    if($(this).attr("name")) {
+//      $("#FormMailToFieldNameId").append(
+//        $('<option></option>').val($(this).attr("name")).html($(this).attr("name"))
+//      );
+        $('#FormMailToFieldNameId')
+          .append($('<option>', { value : $(this).attr("id") })
+          .text($(this).attr("name")));
+    }
+  });
+}
 </script>

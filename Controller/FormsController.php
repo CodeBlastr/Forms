@@ -3,11 +3,11 @@ App::uses('FormsAppController', 'Forms.Controller');
 /**
  * Form Controller
  *
- * For use in grouping field inputs (database fields) for use. 
+ * For use in grouping field inputs (database fields) for use.
  * Form fieldsets can literally mean a database table.  The database table where formInputs
  * will be saved.  For example : if you had a "ticket" fieldset, you may set it up
- * so that it formInputs (database fields) added to this fieldset, are added to the database 
- * table named, "tickets".  
+ * so that it formInputs (database fields) added to this fieldset, are added to the database
+ * table named, "tickets".
  *
  * PHP versions 5
  *
@@ -18,7 +18,7 @@ App::uses('FormsAppController', 'Forms.Controller');
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2012, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaï¿½ Project
  * @package       zuha
  * @subpackage    zuha.app.plugins.forms.controllers
  * @since         Zuha(tm) v 0.0.1
@@ -45,8 +45,8 @@ class FormsController extends FormsAppController {
 				$this->Session->setFlash($e->getMessage());
 			}
 		}
-		
-		$this->set('methods', $this->Form->methods()); 
+
+		$this->set('methods', $this->Form->methods());
 		$this->set('copies', $this->Form->copyTypes());
 	}
 
@@ -71,8 +71,8 @@ class FormsController extends FormsAppController {
 		if (!$this->Form->exists()) {
 			throw new NotFoundException(__('Invalid form.'));
 		}
-		
-			
+
+
 		if (!empty($this->request->data['FormInput'])) {
 			# create the formInput
 			try {
@@ -83,8 +83,8 @@ class FormsController extends FormsAppController {
 				$this->Session->setFlash($e->getMessage());
 				$this->set('duplicate', true);
 			}
-		} 
-		
+		}
+
 		if (!empty($this->request->data['Form'])) {
 			try {
 				$this->Form->add($this->request->data);
@@ -96,7 +96,7 @@ class FormsController extends FormsAppController {
 		}
 		$formInput = !empty($formInputId) ? $this->Form->FormInput->read(null, $formInputId) : array();
 		$this->request->data = array_merge($this->Form->read(null, $id), $formInput, $this->request->data);
-		$this->set('methods', $this->Form->methods()); 
+		$this->set('methods', $this->Form->methods());
 		$this->set('inputTypes', $this->Form->FormInput->inputTypes());
 		$this->set('systemDefaultValues', $this->Form->FormInput->systemDefaultValues());
 	}
@@ -131,37 +131,37 @@ class FormsController extends FormsAppController {
 		if (!$this->Form->exists()) {
 			throw new NotFoundException(__('Invalid form.'));
 		}
-		
+
 		$formGroup = $this->Form->display($id, $type);
 		if (!empty($formGroup) && isset($this->request->params['requested'])) {
-			$formGroup = array_merge($formGroup, $this->_specialData()); 
+			$formGroup = array_merge($formGroup, $this->_specialData());
         	return $formGroup;
         } else {
 			return false;
 		}
 	}
-	
+
 	protected function _specialData() {
 		return array('user_id' => $this->Session->read('Auth.User.id'));
 	}
-	
-	
+
+
 /**
  * Takes a custom form and processes it using the model->action from the form settings.
- * 
+ *
  * @todo		This could probably be moved to the Form model.
  * @todo		The duplication of the failures is probably a logic error that can be fixed or at least put into a separate function.
  */
 	public function process() {
 		$this->Session->delete('errors');
-		if (!empty($this->request->data)) {			
+		if (!empty($this->request->data)) {
 			$plugin = $this->request->data['Form']['plugin'];
 			$this->modelName = $this->request->data['Form']['model'];
 			$action = $this->request->data['Form']['action'];
 			$init = !empty($plugin) ? $plugin . '.' . $this->modelName : $this->modelName;
 			$this->Model = ClassRegistry::init($init);
 			# validates the data before trying to run the action
-			# previously this was just $this->request->data but was changed to $this->request->data[$modelName] because 
+			# previously this was just $this->request->data but was changed to $this->request->data[$modelName] because
 			# I could not figure out why the category data was causing a validation failure 4/22/2011 RK
 			if ($this->Model->saveAll($this->request->data[$this->modelName], array('validate' => 'only'))) {
 				try {
@@ -176,7 +176,7 @@ class FormsController extends FormsAppController {
 							$this->redirect($this->request->data['Form']['success_url']);
 						} else {
 							$this->redirect($this->referer());
-						}			
+						}
 					} else {
 						# 3rd point of failure is likely a database error
 						if (!empty($this->request->data['Form']['fail_message'])) {
@@ -186,7 +186,7 @@ class FormsController extends FormsAppController {
 						}
 						if (!empty($this->request->data['Form']['fail_url'])) {
 							# this makes the submitted form data accessible by sessions
-							$this->Session->write($this->Model->data);	
+							$this->Session->write($this->Model->data);
 							$this->redirect($this->request->data['Form']['fail_url']);
 						} else {
 							# this makes the submitted form data accessible by sessions
@@ -198,7 +198,7 @@ class FormsController extends FormsAppController {
 				} catch (Exception $e) {
 					# 2nd point of failure would be detected in the model exceptions
 					# this makes the submitted form data accessible by sessions
-					$this->Session->write($this->Model->data);	
+					$this->Session->write($this->Model->data);
 					# if registration verification is required the model will return this code
 					if ($e->getCode() > 500000) {
 						$this->Session->setFlash($e->getMessage() . $this->request->data['Form']['success_message']);
@@ -206,15 +206,15 @@ class FormsController extends FormsAppController {
 					} else {
 						if (!empty($this->request->data['Form']['fail_url'])) {
 							# this makes the submitted form data accessible by sessions
-							$this->Session->setFlash($e->getMessage());	
+							$this->Session->setFlash($e->getMessage());
 							$this->redirect($this->request->data['Form']['fail_url']);
 						} else {
 							# this makes the submitted form data accessible by sessions
 							$this->Session->setFlash($e->getMessage() . $this->Model->validationErrors);
 							$this->redirect($this->referer());
 						}
-					}	
-				}	
+					}
+				}
 			} else {
 				$this->_handleValidationResponse();
 			}
@@ -222,9 +222,9 @@ class FormsController extends FormsAppController {
 			echo 'uncaught exception : 1238740918723409723489';
 			break;
 		}
-	}	
-	
-	
+	}
+
+
 /**
  * Handle responding to invalid form data
  *
@@ -245,11 +245,11 @@ class FormsController extends FormsAppController {
 		}
 		if (!empty($this->request->data['Form']['fail_url'])) {
 			# this makes the submitted form data accessible by sessions
-			$this->Session->write($this->Model->data);	
+			$this->Session->write($this->Model->data);
 			$this->redirect($this->request->data['Form']['fail_url']);
 		} else {
 			# this makes the submitted form data accessible by sessions
-			$this->Session->write($this->Model->data);	
+			$this->Session->write($this->Model->data);
 			$this->Session->write(array('errors' => array($this->modelName => $this->Model->validationErrors)));
 			$this->redirect($this->referer());
 		}

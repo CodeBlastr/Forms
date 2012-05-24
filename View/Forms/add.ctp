@@ -13,7 +13,7 @@
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2012, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaï¿½ Project
  * @package       zuha
  * @subpackage    zuha.app.plugins.forms.views
  * @since         Zuha(tm) v 0.0.1
@@ -28,14 +28,14 @@
 	<fieldset>
  		<legend><?php echo __('What type of form?');?></legend>
 	<?php
-		echo $this->Form->input('Form.copy', array('label' => false, 'empty' => '--Select--')); 
+		echo $this->Form->input('Form.copy', array('label' => false, 'empty' => '--Select--'));
 	?>
     </fieldset>
 	<fieldset>
  		<legend><?php echo __('Add Form');?></legend>
 	<?php
 		echo $this->Form->input('Form.id');
-		echo $this->Form->input('Form.name'); 
+		echo $this->Form->input('Form.name');
 	?>
     </fieldset>
     <fieldset>
@@ -43,17 +43,18 @@
      <?php
 		echo $this->Form->input('Form.method');
 		echo $this->Form->input('Form.action', array('placeholder' => ' (ex: add, edit, view, save, remove)'));
-		echo $this->Form->input('Form.plugin'); 
-		echo $this->Form->input('Form.model', array('placeholder' => ' (camel case model name)' )); 
-		echo $this->Form->input('Form.success_message'); 
-		echo $this->Form->input('Form.success_url'); 
-		echo $this->Form->input('Form.fail_message'); 
-		echo $this->Form->input('Form.fail_url'); 
+		echo $this->Form->input('Form.plugin');
+		echo $this->Form->input('Form.model', array('placeholder' => ' (camel case model name)' ));
+		echo $this->Form->input('Form.success_message');
+		echo $this->Form->input('Form.success_url');
+		echo $this->Form->input('Form.fail_message');
+		echo $this->Form->input('Form.fail_url');
+   		echo $this->Form->input('Form.notifiees', array('type' => 'text', 'label' => 'Email(s) to notify of submissions', 'placeholder' => 'Separate emails by commas'));
 	?>
 	</fieldset>
 <?php echo $this->Form->end('Submit');?>
 </div>
-<?php 
+<?php
 // set the contextual menu items
 $this->set('context_menu', array('menus' => array(
 	array(
@@ -78,9 +79,9 @@ $this->set('context_menu', array('menus' => array(
 			)
 		),
 	))); ?>
-    
 
-    
+
+
 <script type="text/javascript">
 formType()
 
@@ -92,12 +93,12 @@ $("#FormAddForm").change( function() {
 function formType() {
 	$("#FormName").parent().parent().hide();
 	$("#FormMethod").parent().parent().hide();
-	
+
 	var val = $("#FormCopy").val()
-	
+
 	if (val == "custom") {
 		$("#FormName").parent().parent().show()
 		$("#FormMethod").parent().parent().show()
 	}
-}		
+}
 </script>

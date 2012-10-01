@@ -146,7 +146,7 @@ class Form extends FormsAppModel {
 					'Form.id' => $data['Form']['id'],
 					),
 				));
-            if (!empty($form['Form']['mail_to_field_name_id'])) {
+            if (!empty($form['Form']['response_email'])) {
               $this->autoRespond($form, $data);
             }
 
@@ -166,13 +166,19 @@ class Form extends FormsAppModel {
 	}
 
     public function autoRespond($form, $data) {
+    	
         $formInputWithEmail = $this->FormInput->find('first', array(
-            'conditions' => array('id' => $form['Form']['mail_to_field_name_id'])
+            'conditions' => array('id' => $form['Form']['response_email'])
         ));
-        $formInputWithEmail = $formInputWithEmail['FormInput']['code'];
-        $toEmail = $data[$data['Form']['model']][$formInputWithEmail];
-#debug($form);break;
-        $this->__sendMail($toEmail, $form['Form']['response_subject'], $form['Form']['response_body']);
+		
+		$model = !empty($formInputWithEmail['FormInput']['model_override']) ? substr($formInputWithEmail['FormInput']['model_override'], 0,  strpos($formInputWithEmail['FormInput']['model_override'], '.')) : $data['Form']['model']; // get the model name even if it is in Model.X format
+		
+		$extractString = !empty($formInputWithEmail['FormInput']['model_override']) ? '/' . substr($formInputWithEmail['FormInput']['model_override'], (1 +   strpos($formInputWithEmail['FormInput']['model_override'], '.'))) . '/' . $formInputWithEmail['FormInput']['code'] : '/' . $formInputWithEmail['FormInput']['code']; // N/field OR field, ex. /8/value OR /value
+
+        
+        $toEmail = Set::extract($extractString, $data[$model]);
+		
+        $this->__sendMail($toEmail[0], $form['Form']['response_subject'], $form['Form']['response_body']);
         //$this->__sendMail($toEmail, $form['response_subject'], $form['response_body'], $template, $from);
     }
 

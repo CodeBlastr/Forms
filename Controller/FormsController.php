@@ -155,14 +155,13 @@ class FormsController extends FormsAppController {
 	public function process() {
 		$this->Session->delete('errors');
 		if (!empty($this->request->data)) {
+			$this->_checkStats();
 			$plugin = $this->request->data['Form']['plugin'];
 			$this->modelName = $this->request->data['Form']['model'];
 			$action = $this->request->data['Form']['action'];
 			$init = !empty($plugin) ? $plugin . '.' . $this->modelName : $this->modelName;
 			$this->Model = ClassRegistry::init($init);
-			# validates the data before trying to run the action
-			# previously this was just $this->request->data but was changed to $this->request->data[$modelName] because
-			# I could not figure out why the category data was causing a validation failure 4/22/2011 RK
+			// validates the data before trying to run the action
 			if ($this->Model->saveAll($this->request->data[$this->modelName], array('validate' => 'only'))) {
 				try {
 					$result = $this->Model->$action($this->request->data);
@@ -178,28 +177,28 @@ class FormsController extends FormsAppController {
 							$this->redirect($this->referer());
 						}
 					} else {
-						# 3rd point of failure is likely a database error
+						// 3rd point of failure is likely a database error
 						if (!empty($this->request->data['Form']['fail_message'])) {
 							$this->Session->setFlash($this->request->data['Form']['fail_message'], true);
 						} else {
 							$this->Session->setFlash(__('Please Try Again.'));
 						}
 						if (!empty($this->request->data['Form']['fail_url'])) {
-							# this makes the submitted form data accessible by sessions
+							// this makes the submitted form data accessible by sessions
 							$this->Session->write($this->Model->data);
 							$this->redirect($this->request->data['Form']['fail_url']);
 						} else {
-							# this makes the submitted form data accessible by sessions
+							// this makes the submitted form data accessible by sessions
 							$this->Session->write($this->Model->data);
 							$this->Session->write($this->Model->validationErrors);
 							$this->redirect($this->referer());
 						}
 					}
 				} catch (Exception $e) {
-					# 2nd point of failure would be detected in the model exceptions
-					# this makes the submitted form data accessible by sessions
+					// 2nd point of failure would be detected in the model exceptions
+					// this makes the submitted form data accessible by sessions
 					$this->Session->write($this->Model->data);
-					# if registration verification is required the model will return this code
+					// if registration verification is required the model will return this code
 					if ($e->getCode() > 500000) {
 						$this->Session->setFlash($e->getMessage() . $this->request->data['Form']['success_message']);
 						$this->redirect($this->request->data['Form']['success_url']);
@@ -224,6 +223,20 @@ class FormsController extends FormsAppController {
 		}
 	}
 
+/**
+ * check stats to help prevent spam
+ */
+ 	protected function _checkStats() {
+ 		$statsEntry = $this->Session->read('Stats.entry');
+ 		$time = time() - base64_decode($statsEntry);
+		if ($time > 50 && $time < 10001) {
+			return true;
+		} else {
+			echo 'uncaught exception : 329857769196719876928723';
+			break;
+		}
+ 	}
+
 
 /**
  * Handle responding to invalid form data
@@ -237,7 +250,7 @@ class FormsController extends FormsAppController {
 		foreach($this->Model->validationErrors as $field => $error) {
 			$message .= $error[0];
 		}
-		# 1st point of failure, is validation
+		// 1st point of failure, is validation
 		if (!empty($this->request->data['Form']['fail_message'])) {
 			$this->Session->setFlash($this->request->data['Form']['fail_message'] . $message, true);
 		} else {

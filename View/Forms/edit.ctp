@@ -44,7 +44,7 @@
         <fieldset>
           <legend class="toggleClick"><?php echo __('Configure Email Auto-Responder');?></legend>
           <?php
-          echo $this->Form->input('Form.mail_to_field_name_id'); // bad name, need to think of something better, and it would be a list of fields (so this can only be on the edit form page)
+          echo $this->Form->input('Form.response_email', array('type' => 'select')); 
           echo $this->Form->input('Form.response_subject');
           echo $this->Form->input('Form.response_body', array('type' => 'richtext', 'ckeSettings' => null));
           ?>
@@ -233,13 +233,13 @@ function defaultValue() {
 }
 
 function generateSelectOptions() {
-  // Options for #FormMailToFieldNameId
+  // Options for #FormResponseEmail
   $(".formPreview input").each(function(i) {
     if($(this).attr("name")) {
-//      $("#FormMailToFieldNameId").append(
+//      $("#FormResponseEmail").append(
 //        $('<option></option>').val($(this).attr("name")).html($(this).attr("name"))
 //      );
-        $('#FormMailToFieldNameId')
+        $('#FormResponseEmail')
           .append($('<option>', { value : $(this).attr("id") })
           .text($(this).attr("name")));
     }

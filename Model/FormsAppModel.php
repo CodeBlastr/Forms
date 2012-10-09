@@ -2,4 +2,3 @@
 class FormsAppModel extends AppModel {
 
 }
-?>

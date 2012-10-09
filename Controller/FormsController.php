@@ -226,10 +226,10 @@ class FormsController extends FormsAppController {
 /**
  * check stats to help prevent spam
  */
- 	protected function _checkStats() {
+ 	protected function _checkStats() {		
  		$statsEntry = $this->Session->read('Stats.entry');
  		$time = time() - base64_decode($statsEntry);
-		if ($time > 20 && $time < 10001) {
+		if ($time > 10 && $time < 10001) {
 			return true;
 		} else {
 			echo 'uncaught exception : 329857769196719876928723';

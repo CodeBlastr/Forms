@@ -1,4 +1,5 @@
 <?php
+App::uses('FormsAppModel', 'Forms.Model');
 /**
  * FormInput Model
  *

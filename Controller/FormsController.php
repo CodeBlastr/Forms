@@ -28,7 +28,7 @@ class FormsController extends FormsAppController {
 
 	public $name = 'Forms';
 	public $uses = 'Forms.Form';
-	public $allowedActions = array('display', 'process');
+	public $allowedActions = array('display', 'process', 'secure');
 
 	public function index() {
 		$this->Form->recursive = 0;
@@ -144,6 +144,21 @@ class FormsController extends FormsAppController {
 	protected function _specialData() {
 		return array('user_id' => $this->Session->read('Auth.User.id'));
 	}
+	
+	
+/**
+ * Create a key for remote forms to use (and delete any keys older than an hour)
+ * must be called like this... http://www.example.com/forms/forms/secure.json
+ */
+ 	public function secure() {
+ 		try {
+ 			App::uses('FormKey', 'Forms.Model');
+			$FormKey = new FormKey();
+ 			$this->set('key', $FormKey->createKey());
+ 		} catch (Exception $e) {
+			$this->Session->setFlash($e->getMessage());
+		}
+ 	}
 
 
 /**
@@ -155,7 +170,7 @@ class FormsController extends FormsAppController {
 	public function process() {
 		$this->Session->delete('errors');
 		if (!empty($this->request->data)) {
-			$this->_checkStats();
+			$this->_checkSecurity();
 			$plugin = $this->request->data['Form']['plugin'];
 			$this->modelName = $this->request->data['Form']['model'];
 			$action = $this->request->data['Form']['action'];
@@ -225,8 +240,35 @@ class FormsController extends FormsAppController {
 
 /**
  * check stats to help prevent spam
+ * 
+ * For in domain tests we simply set a session and make sure that the session is a certain age before allowing a form submission
+ * 
+ * For cross domain test you should have a valid key submitted with your form.
+ * 
+ * Here is an example of code you could use to get a key
+ * <?php $json = json_decode(file_get_contents('http://example.com/forms/forms/secure.json')); ?> 
+ * <script type="text/javascript">
+ *	jQuery(document).ready(function() {
+ *		jQuery(".warning").hide();
+ *		jQuery("#addForm").append("<input type=\"hidden\" name=\"data[FormKey][id]\" value=\"<?php echo $json->key; ?>\" />");
+ *	})
+ * </script>
  */
- 	protected function _checkStats() {		
+ 	protected function _checkSecurity() {
+ 		
+		// cross domain test
+ 		if (!empty($this->request->data['FormKey']['id'])) {
+ 			App::uses('FormKey', 'Forms.Model');
+			$FormKey = new FormKey();
+ 			if ($success = $FormKey->testKey($this->request->data)) {
+ 				return $success;
+ 			} else {
+				echo 'uncaught exception : 8638678967189768976123894';
+				break; 				
+ 			}
+ 		}	
+		
+		// in domain test
  		$statsEntry = $this->Session->read('Stats.entry');
  		$time = time() - base64_decode($statsEntry);
 		if ($time > 10 && $time < 10001) {

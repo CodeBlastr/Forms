@@ -13,7 +13,7 @@
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2012, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaï¿½ Project
  * @package       zuha
  * @subpackage    zuha.app.plugins.forms.models
  * @since         Zuha(tm) v 0.0.1
@@ -92,8 +92,9 @@ class FormInput extends FormsAppModel {
 					if ($this->delete($this->id)) {
 						return false;
 					} else {
-						echo 'Uncaught error code : 102398102983120398';
-						break;
+					    throw new NotFoundException('Uncaught error code : 102398102983120398');
+//						echo 'Uncaught error code : 102398102983120398';
+//						break;
 					} 
 				}
 			}
@@ -129,8 +130,9 @@ class FormInput extends FormsAppModel {
 				if ($this->query('ALTER TABLE `'.$tableName.'` DROP `'.$formInput['FormInput']['code'].'`')) {
 					return true;
 				} else {
-					echo 'Uncaught error code : 5987109823409876901823';
-					break;
+					throw new NotFoundException('Uncaught error code : 5987109823409876901823');
+//					echo 'Uncaught error code : 5987109823409876901823';
+//					break;
 				}
 			} else {
 				return true;
@@ -458,4 +460,3 @@ class FormInput extends FormsAppModel {
 			
 	
 }
-?>

@@ -32,7 +32,7 @@ $preview = !empty($preview) ? $preview : false;
 
 
 
-#display the view type
+// display the view type
 if (strpos($id, 'view') > -1) {
 
 	#get the model from the controller
@@ -58,11 +58,11 @@ if (strpos($id, 'view') > -1) {
 
 
 
-#display the edit type
+// display the edit type
 } else if (strpos($id, 'edit') > -1) {
 
 
-# initialize the form open tag
+// initialize the form open tag
 echo $this->Form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method']));
 /*echo $this->Form->create($groups['Form']['model'], array(
 				'url' => $groups['Form']['url'],
@@ -129,7 +129,7 @@ foreach ($groups['FormFieldset'] as $fieldset) {
   <?php
   
 }
-#close the form and show the submit button
+// close the form and show the submit button
 echo $this->Form->end('Submit');
 
 
@@ -143,14 +143,14 @@ echo $this->Form->end('Submit');
 
 
 
-#display the add type by default
+// display the add type by default
 } else {
-	# set the form variables in the case of an error
+	// set the form variables in the case of an error
 	$formData = $this->Session->read();
 	$this->Form->data = !empty($formData['Form']) ? $formData : $this->Form->data;
 	$this->Form->validationErrors = $this->Session->read('errors');
 
-	# initialize the form open tag
+	// initialize the form open tag
 	echo $this->Form->create('Form', array('url' => '/forms/forms/process', 'type' => $groups['Form']['method'], 'id' => 'addForm'));
 	echo $this->Form->input('Form.id', array('type' => 'hidden', 'value' => $groups['Form']['id']));
 	echo $this->Form->input('Form.plugin', array('type' => 'hidden', 'value' => $groups['Form']['plugin']));
@@ -183,7 +183,7 @@ echo $this->Form->end('Submit');
 } // end the else which display the add type of form ?>
 </div>
 
-<script src="/js/system/jquery.validate.min.js" type="text/javascript"></script>
+<?php echo $this->Html->script('plugins/jquery.validate.min'); ?>
 
 <script type="text/javascript">
 $("#addForm").validate({

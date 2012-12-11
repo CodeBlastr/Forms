@@ -69,7 +69,7 @@ class Form extends FormsAppModel {
  */
 	public function add($data) {
 		if (empty($data['Form']['copy']) || $data['Form']['copy'] == 'custom') {
-			# create the form url convenience field
+			// create the form url convenience field
 			$plugin = Inflector::underscore(Inflector::pluralize($data['Form']['plugin']));
 			$controller = Inflector::underscore(Inflector::pluralize($data['Form']['model']));
 			$data['Form']['url'] = '/'.$plugin.'/'.$controller.'/'.$data['Form']['action'];

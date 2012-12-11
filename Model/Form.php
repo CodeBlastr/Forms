@@ -101,7 +101,7 @@ class Form extends FormsAppModel {
 		}
 
 		if (is_array($id)) {
-			# put model look up condition here
+			// put model look up condition here
 			if (isset($id['plugin'])) {
 				$formConditions['Form.plugin'] = $id['plugin'];
 			}
@@ -109,7 +109,7 @@ class Form extends FormsAppModel {
 				$formConditions['Form.model'] = $id['model'];
 			}
 		} else {
-			# put id look up conditions here
+			// put id look up conditions here
 			$formConditions = array('Form.id' => $id);
 		}
 		$formGroup = $this->find('first', array(

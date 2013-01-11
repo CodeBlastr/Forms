@@ -271,7 +271,7 @@ class FormsController extends FormsAppController {
 		// in domain test
  		$statsEntry = $this->Session->read('Stats.entry');
  		$time = time() - base64_decode($statsEntry);
-		if ($time > 10 && $time < 10001) {
+		if ($time > 10 && $time < 100001) {
 			return true;
 		} else {
 			echo 'uncaught exception : 329857769196719876928723';

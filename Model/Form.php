@@ -258,13 +258,23 @@ class Form extends FormsAppModel {
 			$contact['FormInput'][4]['is_addable'] = 1;
 			$contact['FormInput'][4]['is_editable'] = 1;
 
-			$contact['FormInput'][5]['code'] = 'current_page_url';
+    		$contact['FormInput'][3]['code'] = 'contact_detail_type';
+			$contact['FormInput'][3]['name'] = 'Contact Detail Type Url';
+			$contact['FormInput'][3]['model_override'] = 'ContactDetail.2';
+			$contact['FormInput'][3]['input_type'] = 'hidden';
+			$contact['FormInput'][3]['default_value'] = 'Current Url';
+			$contact['FormInput'][3]['is_not_db_field'] = 0;
+			$contact['FormInput'][3]['is_visible'] = 1;
+			$contact['FormInput'][3]['is_addable'] = 1;
+			$contact['FormInput'][3]['is_editable'] = 1;
+
+			$contact['FormInput'][5]['code'] = 'value';
 			$contact['FormInput'][5]['name'] = 'Page URL';
-			$contact['FormInput'][5]['model_override'] = 'ContactDetail.1';
+			$contact['FormInput'][5]['model_override'] = 'ContactDetail.2';
 			$contact['FormInput'][5]['input_type'] = 'hidden';
 			$contact['FormInput'][5]['system_default_value'] = 'current page url';
 			$contact['FormInput'][5]['is_required'] = 0;
-			$contact['FormInput'][5]['is_not_db_field'] = 1;
+			$contact['FormInput'][5]['is_not_db_field'] = 0;
 			$contact['FormInput'][5]['is_visible'] = 1;
 			$contact['FormInput'][5]['is_addable'] = 1;
 			$contact['FormInput'][5]['is_editable'] = 1;

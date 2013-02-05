@@ -66,7 +66,7 @@ class FormInput extends FormsAppModel {
 	);
 	
 	
-	public function beforeValidate() {
+	public function beforeValidate($options = array()) {
 		if (!empty($this->data['FormInput']['name']) && empty($this->data['FormInput']['code'])) {
 			$this->data['FormInput']['code'] = Inflector::underscore(strtolower($this->data['FormInput']['name']));
 		}
@@ -80,10 +80,10 @@ class FormInput extends FormsAppModel {
 	public function add($data) {
 		if ($this->save($data)) {
 			if (!empty($data['FormInput']['is_duplicate'])) {
-				# validation checks to see if the field already exists, but that does not disqualify it from working, just need to throw a warning so the user can rename if they need to.
+				// validation checks to see if the field already exists, but that does not disqualify it from working, just need to throw a warning so the user can rename if they need to.
 				return true;
 			} else if (!empty($data['FormInput']['is_not_db_field'])) {
-				# if the field doesn't need to be saved to the database we don't need to do anything but save the input
+				// if the field doesn't need to be saved to the database we don't need to do anything but save the input
 				return true;
 			} else {
 				if ($this->_addField($data['FormInput'])) {
@@ -119,7 +119,7 @@ class FormInput extends FormsAppModel {
  * @todo			Ummm, seems like we need to make it so that we don't go deleting necessary fields (like system fields)
  */
 	public function remove($id) {
-		# setup the values for deleting the field itself too
+		// setup the values for deleting the field itself too
 		$formInput = $this->findbyId($id);
 		$this->FormFieldset->id = $formInput['FormInput']['form_fieldset_id'];
 		$isNotDbField = $formInput['FormInput']['is_not_db_field'];
@@ -181,7 +181,7 @@ class FormInput extends FormsAppModel {
 		$fieldName = $formInput['code'];
 		$fieldSearch = $this->query('SHOW columns FROM '.$tableName.' LIKE "'.$fieldName.'"');
 		
-		# this checks to see if a field name now exists in the table that matches input info
+		// this checks to see if a field name now exists in the table that matches input info
 		if (!empty($fieldSearch)) {
 			return true;
 		} else {
@@ -198,16 +198,16 @@ class FormInput extends FormsAppModel {
  * @return {string}		A properly formatted table name.
  */
 	protected function _getFieldInputTable($fieldsetId, $override = null) {
-		# get the default model name from the fieldset
+		// get the default model name from the fieldset
 		$this->Form->id = $fieldsetId;
 		$modelName = $this->Form->field('model');
 		
-		# check to see if the fieldset model was over ridden by the input 
+		// check to see if the fieldset model was over ridden by the input 
 		if (!empty($override)) {
 			$modelName = $override;
 		}			
 		
-		# return a model name formatted as a table name
+		// return a model name formatted as a table name
 		return Inflector::underscore(Inflector::pluralize($modelName));
 	}
 	
@@ -224,8 +224,8 @@ class FormInput extends FormsAppModel {
 		if (!empty($this->data['FormInput']['is_duplicate'])) {
 			return true;
 		} else {
-			# this checks to see if a field name now exists in the table that matches input info, 
-			# initial validation should fail if it does, so that an error can be returned.
+			// this checks to see if a field name now exists in the table that matches input info, 
+			// initial validation should fail if it does, so that an error can be returned.
 			if($this->_checkFieldExistence($this->data['FormInput'])) {
 				return false;
 			} else {
@@ -243,7 +243,7 @@ class FormInput extends FormsAppModel {
  */
 	protected function _checkTableExistence($model) {
 		$tableName = Inflector::underscore(Inflector::pluralize($model));
-		# this checks to see if a table with this name exists.
+		// this checks to see if a table with this name exists.
 		$tableSearch = $this->query('SHOW columns FROM '.$tableName);
 		if (!empty($tableSearch)) {
 			return $tableName;
@@ -261,13 +261,13 @@ class FormInput extends FormsAppModel {
  * @todo					Simplify and break up the multiple actions going on within this function.
  */
 	protected function _addField($data) {
-		# get the field set info
+		// get the field set info
 		$model = $this->_getFieldInputTable($data['form_id'], $data['model_override']);
 		if($tableName = $this->_checkTableExistence($model)) {
-			# it exists so we'll alter the existing table
+			// it exists so we'll alter the existing table
 			return $this->_alterTable($tableName, $data);
 		} else {
-			# the table does not exist so we need to create it, and then add the field, so use a random name
+			// the table does not exist so we need to create it, and then add the field, so use a random name
 			if ($tableName = $this->_createTable($model)) {
 				return $this->_alterTable($tableName, $data);
 			}
@@ -284,7 +284,7 @@ class FormInput extends FormsAppModel {
  */
 	protected function _createTable($model) {
 		$tableName = Inflector::tableize($model);
-		# add a new table
+		// add a new table
 		$query = 'CREATE TABLE IF NOT EXISTS `'.$tableName.'` ( `id` INT( 11 ) NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
 		if ($this->query($query)) {
 			return $tableName;
@@ -303,15 +303,15 @@ class FormInput extends FormsAppModel {
  * @return {bool}			True on success of new table creation		
  */
 	protected function _alterTable($tableName, $data) {
-		# set the field settings
+		// set the field settings
 		$fieldType = $this->_getFieldType($data['input_type']);
 		$nullStatus = $this->_getNullStatus($data['is_required']);
 		$default = $this->_getDefault($data['default_value']);
 		$unique = $this->_getUniqueKey($data['code'], $data['is_unique']);
 		
-		# add to the existing table
+		// add to the existing table
 		$query = ' ALTER TABLE `'.$tableName.'`';
-		# add the field
+		// add the field
 		$query .= ' ADD `'.$data['code'].'` ' . $fieldType.$nullStatus.$default.$unique;
 		
 		if ($this->query($query)) {
@@ -371,7 +371,7 @@ class FormInput extends FormsAppModel {
 		} else if ($type == 'file') {
 			return 'VARCHAR(255) '; 
 		} else {
-			# break because its invalid
+			// break because its invalid
 			return false;
 		}
  	}
@@ -384,7 +384,7 @@ class FormInput extends FormsAppModel {
  * @return {string}		A mysql null snippet
  */
 	protected function _getNullStatus($isRequired = null) {
-		# set up the NULL value for the database field based on if its required or not
+		// set up the NULL value for the database field based on if its required or not
 		if ($isRequired == 1) {
 			return ' NOT NULL ';
 		} else {
@@ -401,7 +401,7 @@ class FormInput extends FormsAppModel {
  * @return {string}		A mysql default query snippet
  */
 	protected function _getDefault($defaultValue = null) {
-		# input the DEFAULT value if it exists
+		// input the DEFAULT value if it exists
 		if ($defaultValue == null) {
 			return ' ';
 		} else {
@@ -419,7 +419,7 @@ class FormInput extends FormsAppModel {
  * @return {string}		A mysql unique key snippet
  */
 	protected function _getUniqueKey($fieldName, $isUnique = null) {
-		# set up the UNIQUE index if it is a unique field
+		// set up the UNIQUE index if it is a unique field
 		if ($isUnique == 1) {
 			return ' , ADD UNIQUE (`'.$fieldName.'`) ';
 		} else {

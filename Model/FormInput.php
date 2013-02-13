@@ -68,8 +68,9 @@ class FormInput extends FormsAppModel {
 	
 	public function beforeValidate($options = array()) {
 		if (!empty($this->data['FormInput']['name']) && empty($this->data['FormInput']['code'])) {
-			$this->data['FormInput']['code'] = Inflector::underscore(strtolower($this->data['FormInput']['name']));
+			$this->data['FormInput']['code'] = ZuhaInflector::asciify($this->data['FormInput']['name'], array(), '_');
 		}
+		return parent::beforeValidate($options);
 	}
 	
 /** 

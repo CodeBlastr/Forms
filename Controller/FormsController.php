@@ -72,9 +72,8 @@ class FormsController extends FormsAppController {
 			throw new NotFoundException(__('Invalid form.'));
 		}
 
-
 		if (!empty($this->request->data['FormInput'])) {
-			# create the formInput
+			// create the formInput
 			try {
 				$this->Form->FormInput->add($this->request->data);
 				$this->Session->setFlash(__('Input Successfully Added!'));
@@ -255,7 +254,25 @@ class FormsController extends FormsAppController {
  * </script>
  */
  	protected function _checkSecurity() {
- 		
+ 		// defined key test
+        if (defined('__FORMS_KEYS') && !empty($this->request->data['FormKey']['key'])) {
+            $success = false;
+            $keys = unserialize(__FORMS_KEYS);
+            if (!empty($keys['key'][0])) {
+                foreach ($keys['key'] as $key) {
+                    if ($this->request->data['FormKey']['key'] == $key) {
+                        $success = true;
+                        break;
+                    }
+                }
+                if ($success === true) {
+                    return $success;
+                } else {
+        			echo 'uncaught exception : 727273487128347123';
+    				break; 	
+                }
+            }
+        }
 		// cross domain test
  		if (!empty($this->request->data['FormKey']['id'])) {
  			App::uses('FormKey', 'Forms.Model');
@@ -269,14 +286,16 @@ class FormsController extends FormsAppController {
  		}	
 		
 		// in domain test
- 		$statsEntry = $this->Session->read('Stats.entry');
- 		$time = time() - base64_decode($statsEntry);
-		if ($time > 10 && $time < 100001) {
-			return true;
-		} else {
-			echo 'uncaught exception : 329857769196719876928723';
-			break;
-		}
+ 		//$statsEntry = $this->Session->read('Stats.entry');
+ 		//$time = time() - base64_decode($statsEntry);
+		//if ($time > 10 && $time < 100001) {
+	    //	return true;
+		//} else {
+		//	echo 'uncaught exception : 329857769196719876928723';
+		//	break;
+		//}
+        echo 'uncaught exception : 2394982379428374';
+        break;
  	}
 
 
@@ -299,11 +318,11 @@ class FormsController extends FormsAppController {
 			$this->Session->setFlash(__($message, true));
 		}
 		if (!empty($this->request->data['Form']['fail_url'])) {
-			# this makes the submitted form data accessible by sessions
+			// this makes the submitted form data accessible by sessions
 			$this->Session->write($this->Model->data);
 			$this->redirect($this->request->data['Form']['fail_url']);
 		} else {
-			# this makes the submitted form data accessible by sessions
+			// this makes the submitted form data accessible by sessions
 			$this->Session->write($this->Model->data);
 			$this->Session->write(array('errors' => array($this->modelName => $this->Model->validationErrors)));
 			$this->redirect($this->referer());

@@ -290,6 +290,7 @@ class Form extends FormsAppModel {
 	public function copyTypes() {
 		return array(
 			'contact' => 'Contact Form',
+			'answers' => 'Q & A',
 			'custom' => 'Custom',
 			);
 	}

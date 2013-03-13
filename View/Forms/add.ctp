@@ -83,12 +83,10 @@ $this->set('context_menu', array('menus' => array(
 
 
 <script type="text/javascript">
-formType()
 
-$("#FormAddForm").change( function() {
-	formType()
+$("#FormCopy").change( function() {
+	formType();
 })
-
 
 function formType() {
 	$("#FormName").parent().parent().hide();
@@ -101,4 +99,6 @@ function formType() {
 		$("#FormMethod").parent().parent().show()
 	}
 }
+
+formType();
 </script>

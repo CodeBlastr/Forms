@@ -65,7 +65,19 @@ class FormInput extends FormsAppModel {
 		),
 	);
 	
-	
+	public $hasMany = array(
+		'FormAnswer' => array(
+			'className' => 'Forms.FormAnswer',
+			'foreignKey' => 'form_input_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
+
+
+
+
 	public function beforeValidate($options = array()) {
 		if (!empty($this->data['FormInput']['name']) && empty($this->data['FormInput']['code'])) {
 			$this->data['FormInput']['code'] = ZuhaInflector::asciify($this->data['FormInput']['name'], array(), '_');
@@ -90,7 +102,7 @@ class FormInput extends FormsAppModel {
 				if ($this->_addField($data['FormInput'])) {
 					return true;
 				} else {
-					# rollback form input save
+					// rollback form input save
 					if ($this->delete($this->id)) {
 						return false;
 					} else {

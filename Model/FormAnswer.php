@@ -31,4 +31,14 @@ class FormAnswer extends FormsAppModel {
 			'order' => ''
 		)
 	);
+	
+	/**
+	 * Saves answers from a Q&A form
+	 * @param array $data
+	 */
+	public function record($data) {
+		debug($data);
+		break;
+	}
+	
 }

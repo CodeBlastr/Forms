@@ -35,7 +35,7 @@ class FormsController extends FormsAppController {
 		$this->set('forms', $this->paginate());
 	}
 
-	public function add() {
+	public function add($type = 'default') {
 		if (!empty($this->request->data)) {
 			try {
 				$this->Form->add($this->request->data);
@@ -48,6 +48,8 @@ class FormsController extends FormsAppController {
 
 		$this->set('methods', $this->Form->methods());
 		$this->set('copies', $this->Form->copyTypes());
+		
+		$this->view = 'add_' . $type;
 	}
 
 /**

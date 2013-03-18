@@ -35,12 +35,16 @@ class FormsController extends FormsAppController {
 		$this->set('forms', $this->paginate());
 	}
 
-	public function add($type = 'default') {
+	public function add($type = 'default', $foreignModel = null, $foreignKey = null) {
 		if (!empty($this->request->data)) {
 			try {
 				$this->Form->add($this->request->data);
 				$this->Session->setFlash(__('The Form has been saved', true));
-				$this->redirect(array('action'=>'index'));
+				if ( $type === 'formanswer' ) {
+					$this->redirect(array('controller'=>'formFieldsets', 'action'=>'add', $this->Form->id));
+				} else {
+					$this->redirect(array('action'=>'index'));
+				}
 			} catch (Exception $e) {
 				$this->Session->setFlash($e->getMessage());
 			}
@@ -48,6 +52,9 @@ class FormsController extends FormsAppController {
 
 		$this->set('methods', $this->Form->methods());
 		$this->set('copies', $this->Form->copyTypes());
+		
+		$this->set('foreignModel', $foreignModel);
+		$this->set('foreignKey', $foreignKey);
 		
 		$this->view = 'add_' . $type;
 	}

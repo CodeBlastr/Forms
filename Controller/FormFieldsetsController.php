@@ -17,7 +17,7 @@
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2012, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaï¿½ Project
  * @package       zuha
  * @subpackage    zuha.app.plugin.forms.controllers
  * @since         Zuha(tm) v 0.0.1
@@ -30,7 +30,20 @@ class FormFieldsetsController extends FormsAppController {
 	public $uses = 'Forms.FormFieldset';
 	
 
-	public function index() {
+	public function index($id = null) {
+		
+		if ( $id !== null ) {
+			$this->FormFieldset->Form->id = $id;
+			if ( $this->FormFieldset->Form->exists() ) {
+				$this->paginate = array(
+					'conditions' => array('FormFieldset.form_id' => $this->FormFieldset->Form->id)
+					);
+			} else {
+				$this->Session->setFlash(__('The Form for this set could not be found.', true));
+				$this->redirect($this->referer());
+			}
+		}
+		
 		$this->FormFieldset->recursive = 0;
 		$this->set('formFieldsets', $this->paginate());
 	}
@@ -44,12 +57,15 @@ class FormFieldsetsController extends FormsAppController {
 				$this->Session->setFlash(__('The Fieldset could not be saved. Please, try again.', true));
 			}
 		}
-		if (empty($this->request->data)) {
-			$this->request->data = $this->FormFieldset->read(null, $id);
-			$forms = $this->FormFieldset->Form->find('list');
+		elseif (empty($this->request->data)) {
+			if ( $formId === null ) {
+				$params = null;
+			} else {
+				$params = array('conditions'=>array('Form.id' =>$formId));
+			}
+			$forms = $this->FormFieldset->Form->find('list', $params);
 			$this->set(compact('forms'));
 		}
-		$this->set(compact('formId'));
 	}
 
 	public function edit($id = null) {
@@ -61,7 +77,7 @@ class FormFieldsetsController extends FormsAppController {
 				$this->Session->setFlash(__('The Fieldset could not be saved. Please, try again.', true));
 			}
 		}
-		if (empty($this->request->data)) {
+		elseif (empty($this->request->data)) {
 			$this->request->data = $this->FormFieldset->read(null, $id);
 			$forms = $this->FormFieldset->Form->find('list');
 			$this->set(compact('forms'));
@@ -80,4 +96,3 @@ class FormFieldsetsController extends FormsAppController {
 	}
 
 }
-?>

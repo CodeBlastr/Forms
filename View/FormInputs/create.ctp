@@ -11,36 +11,63 @@
 		</div>
 	</div>
 	<div class="span6">
-		<div id="formInputs" style="border: 1px solid #ccffcc; height: 300px;">
-			
-		</div>
+		<div id="formInputs"></div>
 	</div>
 	<div class="span2">
 		<div id="inputOptions">
-			
+			<?php
+			echo $this->Form->create('FormInput');
+			echo $this->Form->end();
+			?>
 		</div>
 	</div>
 </div>
 
 <style type="text/css">
-.usableInput {
-	padding: 10px 5px 5px 5px;
-	background: #fff;
-}
-.usableInput:hover {
-	border: 1px solid #ccc;
-	border-top: 5px solid #ccc;
-	padding: 5px 4px 4px 4px;
-	border-radius: 5px;
-	cursor: move;
-}
-.usableInput *:hover, .usableInput input:hover  {cursor: move !important;}
-.configuring {
-	border: 1px solid #ccc;
-	border-top: 5px solid #ccc;
-	padding: 5px 4px 4px 4px;
-	border-radius: 5px;
-}
+	#formInputs {
+		border: 1px solid #ccc;
+		height: 300px;
+	}
+	.usableInput {
+		padding: 10px 5px 5px 5px;
+		background: #fff;
+		width: 233px;
+	}
+	.usableInput:hover {
+		border: 1px solid #ccc;
+		border-top: 5px solid #ccc;
+		padding: 5px 4px 4px 4px;
+		border-radius: 5px;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+		cursor: move;
+	}
+	.usableInput *:hover, .usableInput input:hover  {cursor: move !important;}
+	.configuring {
+		border: 1px solid #ccc;
+		border-top: 5px solid #ccc;
+		padding: 5px 4px 4px 4px;
+		border-radius: 5px;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+	}
+	.ui-draggable-dragging {
+		border: 1px solid #ccc;
+		border-top: 5px solid #ccc;
+		padding: 5px 4px 4px 4px;
+		border-radius: 5px;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+		box-shadow: 5px 5px 5px #efefef;
+			-moz-box-shadow: 5px 5px 5px #efefef;
+			-webkit-box-shadow: 5px 5px 5px #efefef;
+	}
+	.drop-hover {
+		box-shadow: inset 5px 5px 5px #efefef;
+			-moz-box-shadow: inset 5px 5px 5px #efefef;
+			-webkit-box-shadow: inset 5px 5px 5px #efefef;
+	}
+	.ui-state-highlight { background: #fcfcfc; }
 </style>
 
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
@@ -49,72 +76,156 @@
 $(document).ready(
 	function () {
 		
-		var inputs = [];
+		var inputs, usedIds = [];
 		var newId;
 
-		$("#formInputs").sortable({
-			stop: function(event, ui) {
-				console.log(event.type);
-//				console.log(ui);
-				ui.item.attr('id', newId); /* @todo: need to not do this when we are just re-sorting */
-				$("#formInputs .usableInput").each(function(index, element) {
-					/* @todo: need to apply the correct names to this fields actual set of config fields */
-					//$(this).attr('name', 'data[FormInput]['+index+']');
-				});
-				$('#'+newId).click();
-			},
-			receive: function(event, ui) {
-				var currentInputTypeId = $(ui.sender).attr('id');
+		$("#formInputs").sortable();
+		$(".usableInput").draggable({
+			containment : "#formBuilder",
+			cursor : "move",
+			cursorAt : {left:5},
+			grid : [10,10],
+			zIndex : 100,
+			snap : true,
+			//snapMode : "outer",
+			helper : "clone",
+			connectToSortable : "#formInputs",
+			start: function( event, ui ) {
+				var currentInputTypeId = $(ui.helper.context).attr("id");
 				if ( inputs[currentInputTypeId] === undefined ) {
 					inputs[currentInputTypeId] = 0
 				} else {
 					inputs[currentInputTypeId] = inputs[currentInputTypeId] + 1;
 				}
-				newId = currentInputTypeId + '_' + inputs[currentInputTypeId];
-//				console.log(ui);
-			}
-		});
-		$(".usableInput").draggable({
-			containment : "#formBuilder",
-			cursor : 'move',
-			cursorAt : {left:5},
-			grid : [10,10],
-			zIndex : 100,
-			snap : true,
-			//snapMode : 'outer',
-			helper : 'clone',
-			connectToSortable : '#formInputs',
+				newId = currentInputTypeId + "_" + inputs[currentInputTypeId];
+			},
 			revert: function( event, ui ) {
 				$(this).data("uiDraggable").originalPosition = {top : 0, left : 0};
 				return !event;
 			},
-			stop: function( event, ui ) {}
+			stop: function( event, ui ) {} // might be overridden by the $.sortable.stop()
 		});
 		$("#formInputs").droppable({
 			accept : ".usableInput",
-			hoverclass : "acceptable"
+			hoverClass : "drop-hover",
+			activeClass : "ui-state-highlight",
+			drop: function( event, ui ) {
+				if ( $.inArray(newId, usedIds) === -1 ) {
+					// a new item has dropped
+					usedIds.push( newId )
+					ui.draggable.attr( "id", newId );
+					// copy #formMaster to new div in #inputOptions
+					$("#inputOptions")
+							.add( "div" )
+							.attr( "id", "config_" + newId )
+							.attr( "class", "configPanel" )
+							.html( $("#formMaster").html() );
+					$("#config_"+newId+" input").each(function(index, element){
+						var indexedName = $(this).attr( "name" ).replace("FormInput.", "FormInput."+index+".");
+						$(this).attr( "name", indexedName );
+					});
+					
+					ui.draggable.click();
+				}
+			}
 		});
-		$("#formInputs").on("click", '.usableInput', function(event){
+		$("#formInputs").on("click", ".usableInput", function( event ){
 			var configPanel;
-			$("#formInputs .usableInput").removeClass('configuring');
-			$(this).addClass('configuring');
-			var type = $(this).attr('id').split("_")[0];
-			var typeId = $(this).attr('id').split("_")[1];
-			if ( $.inArray(type, ['checkbox', 'radio']) !== -1 ) {
-				type = 'multiple';
+			$("#formInputs .usableInput").removeClass( "configuring" );
+			$(this).addClass( "configuring" );
+			var type = $(this).attr("id").split("_")[0];
+			
+			var typeId = $(this).attr("id").split("_")[1];
+			if ( $.inArray(type, ["checkbox", "radio"]) !== -1 ) {
+				type = "multiple";
 			}
 			// show new config panel of type: type
-			if ( $("#config_"+type).is('*') ) {
+			if ( $("#config_"+type).is("*") ) {
 				configPanel = $("#config_"+type).html();
 			} else {
-				configPanel = '';
+				configPanel = "";
 			}
-			$("#inputOptions").html(configPanel);
+			$("#inputOptions").html( configPanel );
 		});
 	});
 //]]>
 </script>
 
+
+
+
+
+
+<div id="formMaster">
+	<?php
+			// How should the field appear in the form?
+			echo (isset($duplicate) ? $this->Form->input('is_duplicate', array('type' => 'hidden', 'value' => '1')) : '');
+			echo $this->Form->input('FormInput.name', array('label' => 'Field Label'));
+			echo $this->Form->input('FormInput.show_label', array('label' => 'Display the Label?'));
+			echo $this->Form->input('FormInput.form_fieldset_id');
+			echo $this->Form->input('FormInput.order');
+			echo $this->Form->input('FormInput.input_type');
+			echo $this->Form->input('FormInput.is_visible');
+			echo $this->Form->input('FormInput.is_addable');
+			echo $this->Form->input('FormInput.is_editable');
+			
+				// Text field options
+				echo $this->Form->input('FormInput.min_length', array('class' => 'input-mini', 'min' => 0));
+				echo $this->Form->input('FormInput.max_length', array('class' => 'input-mini', 'min' => 0));
+				echo $this->Form->input('FormInput.placeholder', array('placeholder' => 'this is a "placeholder"'));
+				
+				// Textarea field options
+				echo $this->Form->input('FormInput.rows', array('class' => 'input-mini', 'min' => 0));
+				echo $this->Form->input('FormInput.columns', array('class' => 'input-mini', 'min' => 0));
+				
+				// Selects, checkboxes, and multi-selects, and radio sets options
+				echo $this->Form->input('FormInput.legend', array('after' => ' text above radio input types'));
+				echo $this->Form->input('FormInput.multiple', array('after' => ' valid values are 1 or checkbox'));
+				echo $this->Form->input('FormInput.empty_text', array('after' => ' text for null value in select drop downs'));
+				echo $this->Form->input('FormInput.option_values', array('after' => ' One option per line'));
+				echo $this->Form->input('FormInput.option_names', array('after' => ' must have the same number of lines'));
+				
+				// Date field options
+				echo $this->Form->input('FormInput.time_format', array('after' => ' valid values are 12, 24, and none', 'options' => array('12'=>'12','24'=>'24'), 'empty'=>true ));
+				echo $this->Form->input('FormInput.date_format', array('after' => ' valid values are DMY, MDY, YMD and NONE', 'options' => array('DMY'=>'DMY','MDY'=>'MDY','YMD'=>'YMD'), 'empty'=>true ));
+				echo $this->Form->input('FormInput.min_year', array('class' => 'input-mini', 'after' => ' valid value is a 4 digit year'));
+				echo $this->Form->input('FormInput.max_year', array('class' => 'input-mini', 'after' => ' valid value is a 4 digit year'));
+				echo $this->Form->input('FormInput.minute_interval', array('class' => 'input-mini', 'after' => ' time between minutes in minute drop down, ie. 15, will show 00 : 15 : 30 : 45'));
+			
+			// How should the information be treated in the database?
+			echo $this->Form->input('FormInput.code', array('after' => 'The actual database column name if applicable.'));
+			echo $this->Form->input('FormInput.is_not_db_field');
+			echo $this->Form->input('FormInput.model_override');
+			
+			// Would you like ajax validation rules and messages?
+			echo $this->Form->input('FormInput.is_required');
+			echo $this->Form->input('FormInput.validation', array('type' => 'select', 'label' => 'Validation Type', 'options' => array('email' => 'email', 'number' => 'number'), 'empty' => true));
+			echo $this->Form->input('FormInput.validation_message', array('after' => ' not currently used, but will be available in future versions'));
+			
+			// Should the field be prepopulated with any data?
+			echo $this->Form->input('FormInput.system_default_value', array('empty' => true, 'options' => array('current user' => 'current user')));
+			echo $this->Form->input('FormInput.default_value');
+			
+			// Do you want anything around the input (usually for help text)?
+			echo $this->Form->input('FormInput.before');
+			echo $this->Form->input('FormInput.separator');
+			echo $this->Form->input('FormInput.after');
+			echo $this->Form->input('FormInput.div_id', array('type' => 'text', 'after' => ' a custom id for the div around this input'));
+			echo $this->Form->input('FormInput.div_class', array('after' => ' a custom class for the div around this input'));
+			echo $this->Form->input('FormInput.error_message', array('after' => ' a custom error message for this input'));
+			
+			// Mostly unused field options for future use.
+			echo $this->Form->input('FormInput.is_unique');
+			echo $this->Form->input('FormInput.is_system');
+			echo $this->Form->input('FormInput.is_quicksearch');
+			echo $this->Form->input('FormInput.is_advancedsearch');
+			echo $this->Form->input('FormInput.is_comparable');
+			echo $this->Form->input('FormInput.is_layered');
+			echo $this->Form->input('FormInput.layer_order');
+			
+			
+			?>
+</div>
 
 
 
@@ -173,11 +284,11 @@ $(document).ready(
 	        <fieldset id="config_dates">
 				<legend><?php echo __('Date field options');?></legend>
 				<?php
-				echo $this->Form->input('FormInput.time_format', array('after' => ' valid values are 12, 24, and none'));
-				echo $this->Form->input('FormInput.date_format', array('after' => ' valid values are DMY, MDY, YMD and NONE'));
-				echo $this->Form->input('FormInput.min_year', array('after' => ' valid value is a 4 digit year'));
-				echo $this->Form->input('FormInput.max_year', array('after' => ' valid value is a 4 digit year'));
-				echo $this->Form->input('FormInput.minute_interval', array('after' => ' time between minutes in minute drop down, ie. 15, will show 00 : 15 : 30 : 45'));
+				echo $this->Form->input('FormInput.time_format', array('after' => ' valid values are 12, 24, and none', 'options' => array('12'=>'12','24'=>'24'), 'empty'=>true ));
+				echo $this->Form->input('FormInput.date_format', array('after' => ' valid values are DMY, MDY, YMD and NONE', 'options' => array('DMY'=>'DMY','MDY'=>'MDY','YMD'=>'YMD'), 'empty'=>true ));
+				echo $this->Form->input('FormInput.min_year', array('class' => 'input-mini', 'after' => ' valid value is a 4 digit year'));
+				echo $this->Form->input('FormInput.max_year', array('class' => 'input-mini', 'after' => ' valid value is a 4 digit year'));
+				echo $this->Form->input('FormInput.minute_interval', array('class' => 'input-mini', 'after' => ' time between minutes in minute drop down, ie. 15, will show 00 : 15 : 30 : 45'));
 				echo $this->Form->submit('Apply');
 				?>
 	    	</fieldset>

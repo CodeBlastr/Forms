@@ -70,6 +70,30 @@ class FormInputsController extends FormsAppController {
 		$this->set('inputTypes', $this->FormInput->inputTypes());
 		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
 	}
+	public function create($fieldsetId = null) {
+		if (!empty($this->request->data['FormInput'])) {
+			// create the formInput
+			try {
+				$this->Form->FormInput->add($this->request->data);
+				$this->Session->setFlash(__('Input Successfully Added!'));
+				$this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
+			} catch (Exception $e) {
+				$this->Session->setFlash($e->getMessage());
+			}
+		}
+		
+		// variables needed for display of the view
+		if ( $fieldsetId === null ) {
+			$params = null;
+		} else {
+			$params = array('conditions'=>array('FormFieldset.id' => $fieldsetId));
+		}
+		$formFieldsets = $this->FormInput->FormFieldset->find('list', $params);
+		
+		$this->set(compact('formFieldsets'));
+		$this->set('inputTypes', $this->FormInput->inputTypes());
+		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
+	}
 
 /**
  * This function is for editing formInput fields.

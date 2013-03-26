@@ -23,7 +23,7 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 		<div id="inputOptions">
 			<?php
 			echo $this->Form->create('FormInput');
-			echo $this->Form->submit('Save Form');
+			echo $this->Form->submit('Save Form Inputs');
 			echo $this->Form->end();
 			?>
 		</div>
@@ -48,7 +48,7 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 	echo $this->Html->tag('div', $this->Form->input('FormInput.min_length', array('class' => 'input-mini', 'min' => 0))
 			. $this->Form->input('FormInput.max_length', array('class' => 'input-mini', 'min' => 0))
 			. $this->Form->input('FormInput.placeholder', array('placeholder' => 'this is a "placeholder"'))
-			, array('class' => 'textConfig hiddenConfig')
+			, array('class' => 'textlineConfig hiddenConfig')
 	);
 
 	// Textarea field options

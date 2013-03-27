@@ -127,24 +127,22 @@ $(document).ready(function() {
 	}
   });
 
-  $("#formInputs").droppable({
-	accept: ".usableInput",
-	activeClass: "ui-state-highlight",
-	hoverClass: "drop-hover",
-	drop: function(event, ui) {
-	  afterDroppableDrop(ui);
-	}
-  });
-  
-  $("#formInputs").sortable({
-	update: function(event, ui) {
-	  updateFormInputOrders();
-	}
-  });
-
   $("#formInputs")
+		  .droppable({
+			accept: ".usableInput",
+			activeClass: "ui-state-highlight",
+			hoverClass: "drop-hover",
+			drop: function(event, ui) {
+			  afterDroppableDrop(ui);
+			}
+		  })
+		  .sortable({
+			update: function(event, ui) {
+			  updateFormInputOrders();
+			}
+		  })
+		  // highlight and show config panel
 		  .on("click", ".usableInput", function(event) {
-			// hightlight and show config panel
 			$("#formInputs .usableInput").removeClass("configuring");
 			$(this).addClass("configuring");
 			$("#inputOptions .configPanel").hide();
@@ -152,16 +150,15 @@ $(document).ready(function() {
 		  });
 
   $("#inputOptions")
+		  // sync display of label with what they type in the label field
 		  .on("input", ".FormInputName", function(event) {
-			// sync display of label with what they type in the label field
 			var $elementConfigDiv = $(this).parent().parent();
 			var divId = $elementConfigDiv.attr("id");
 			var sortableInputId = divId.substr(divId.indexOf('_')+1, divId.length);
 			$("#"+sortableInputId + " label").html( $(this).val() );
-		  });
-  $("#inputOptions")
+		  })
+		  // sync FormInputOptionValues with FormInputOptionNames
 		  .on("input", ".FormInputOptionNames", function(event) {
-			// sync FormInputOptionValues with FormInputOptionNames
 			$(".FormInputOptionValues", $(this).parent().parent()).val( $(this).val() );
 		  });
 

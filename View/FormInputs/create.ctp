@@ -9,17 +9,17 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 		<div id="usableInputs">
 			<b>Elements</b><hr/>
 			<div class="usableInput" id="textbox">Abc</div>
-			<div class="usableInput" id="checkbox"><input type="checkbox" disabled="disabled"> Checkbox</div>
-			<div class="usableInput" id="radio"><input type="radio" disabled="disabled"> Radio Button</div>
-			<div class="usableInput" id="textline">Text Line <input type="text" disabled="disabled"></div>
-			<div class="usableInput" id="textarea">Textarea <textarea disabled="disabled"></textarea></div>
-			<div class="usableInput" id="fileselect">Upload a File <input type="file" disabled="disabled"></div>
+			<div class="usableInput" id="checkbox"><input type="checkbox" disabled="disabled"> <label>Checkbox</label></div>
+			<div class="usableInput" id="radio"><input type="radio" disabled="disabled"> <label>Radio Button</label></div>
+			<div class="usableInput" id="textline"><label>Text Line</label> <input type="text" disabled="disabled"></div>
+			<div class="usableInput" id="textarea"><label>Textarea</label> <textarea disabled="disabled"></textarea></div>
+			<div class="usableInput" id="fileselect"><label>Upload a File</label> <input type="file" disabled="disabled"></div>
 		</div>
 	</div>
-	<div class="span6">
+	<div class="span5">
 		<div id="formInputs"></div>
 	</div>
-	<div class="span2">
+	<div class="span3">
 		<div id="inputOptions">
 			<?php
 			echo $this->Form->create('FormInput');
@@ -35,34 +35,34 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 	<?php
 	// How should the field appear in the form?
 	echo (isset($duplicate) ? $this->Form->input('is_duplicate', array('type' => 'hidden', 'value' => '1')) : '');
-	echo $this->Form->input('FormInput.name', array('label' => 'Field Label'));
+	echo $this->Form->input('FormInput.name', array('label' => 'Label', 'class'=>'FormInputName'));
 	echo $this->Form->input('FormInput.show_label', array('label' => 'Display the Label?'));
-	echo $this->Form->hidden('FormInput.form_fieldset_id');
-	echo $this->Form->input('FormInput.order', array('class' => 'input-mini'));
+	echo $this->Form->hidden('FormInput.form_id', array('value' => $forms['Form']['id']));
+	echo $this->Form->hidden('FormInput.order');
 	echo $this->Form->hidden('FormInput.input_type');
-	echo $this->Form->input('FormInput.is_visible');
-	echo $this->Form->input('FormInput.is_addable');
-	echo $this->Form->input('FormInput.is_editable');
+	echo $this->Form->hidden('FormInput.is_visible', array('checked' => 'checked'));
+	echo $this->Form->hidden('FormInput.is_addable', array('checked' => 'checked'));
+	echo $this->Form->hidden('FormInput.is_editable', array('checked' => 'checked'));
 
 	// Text field options
-	echo $this->Html->tag('div', $this->Form->input('FormInput.min_length', array('class' => 'input-mini', 'min' => 0))
-			. $this->Form->input('FormInput.max_length', array('class' => 'input-mini', 'min' => 0))
+	echo $this->Html->tag('div', $this->Form->input('FormInput.min_length', array('class' => 'input-mini', 'min' => 0, 'div' => array('class' => 'span6')))
+			. $this->Form->input('FormInput.max_length', array('class' => 'input-mini', 'min' => 0, 'div' => array('class' => 'span6')))
 			. $this->Form->input('FormInput.placeholder', array('placeholder' => 'this is a "placeholder"'))
 			, array('class' => 'textlineConfig hiddenConfig')
 	);
 
 	// Textarea field options
-	echo $this->Html->tag('div', $this->Form->input('FormInput.rows', array('class' => 'input-mini', 'min' => 0))
-			. $this->Form->input('FormInput.columns', array('class' => 'input-mini', 'min' => 0))
+	echo $this->Html->tag('div', $this->Form->input('FormInput.rows', array('class' => 'input-mini', 'min' => 0, 'div' => array('class' => 'span6')))
+			. $this->Form->input('FormInput.columns', array('class' => 'input-mini', 'min' => 0, 'div' => array('class' => 'span6')))
 			, array('class' => 'textareaConfig hiddenConfig')
 	);
 
 	// Selects, checkboxes, and multi-selects, and radio sets options
-	echo $this->Html->tag('div', $this->Form->input('FormInput.legend', array('after' => ' text above radio input types'))
-			. $this->Form->input('FormInput.multiple', array('after' => ' valid values are 1 or checkbox'))
-			. $this->Form->input('FormInput.empty_text', array('after' => ' text for null value in select drop downs'))
-			. $this->Form->input('FormInput.option_values', array('after' => ' One option per line'))
-			. $this->Form->input('FormInput.option_names', array('after' => ' must have the same number of lines'))
+	echo $this->Html->tag('div', $this->Form->input('FormInput.legend', array('after' => '<small>text above radio input types</small>'))
+			. $this->Form->input('FormInput.multiple', array('options' => array('1' => 'Yes', 'checkbox' => 'Checkbox') ))//, 'after' => ' valid values are 1 or checkbox'))
+			. $this->Form->hidden('FormInput.empty_text', array('after' => '<small>text for null value in select drop downs</small>', 'value' => '-- select one --'))
+			. $this->Form->input('FormInput.option_values', array('class'=>'FormInputOptionValues hidden', 'label' => false))
+			. $this->Form->input('FormInput.option_names', array('class'=>'FormInputOptionNames') )//, array('after' => '<small>must have the same number of lines</small>'))
 			, array('class' => 'multipleConfig hiddenConfig')
 	);
 
@@ -71,40 +71,43 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 			. $this->Form->input('FormInput.date_format', array('options' => array('DMY' => 'DMY', 'MDY' => 'MDY', 'YMD' => 'YMD'), 'empty' => true))
 			. $this->Form->input('FormInput.min_year', array('class' => 'input-mini', 'after' => ' valid value is a 4 digit year'))
 			. $this->Form->input('FormInput.max_year', array('class' => 'input-mini', 'after' => ' valid value is a 4 digit year'))
-			. $this->Form->input('FormInput.minute_interval', array('class' => 'input-mini', 'after' => ' time between minutes in minute drop down, ie. 15, will show 00 : 15 : 30 : 45'))
+			. $this->Form->input('FormInput.minute_interval', array('class' => 'input-mini', 'after' => '<small>time between minutes in minute drop down, ie. 15, will show 00 : 15 : 30 : 45</small>'))
 			, array('class' => 'dateConfig hiddenConfig')
 	);
 
 	// How should the information be treated in the database?
-	echo $this->Form->input('FormInput.code', array('after' => 'The actual database column name if applicable.'));
-	echo $this->Form->input('FormInput.is_not_db_field');
-	echo $this->Form->input('FormInput.model_override');
+	echo $this->Form->hidden('FormInput.code', array('value' => 'answer'));
+	echo $this->Form->hidden('FormInput.is_not_db_field', array('checked' => 'checked'));
+	echo $this->Form->hidden('FormInput.model_override');
 
 	// Would you like ajax validation rules and messages?
 	echo $this->Form->input('FormInput.is_required');
-	echo $this->Form->input('FormInput.validation', array('type' => 'select', 'label' => 'Validation Type', 'options' => array('email' => 'email', 'number' => 'number'), 'empty' => true));
-	echo $this->Form->input('FormInput.validation_message', array('after' => ' not currently used, but will be available in future versions'));
+	echo $this->Form->hidden('FormInput.validation', array('type' => 'select', 'label' => 'Validation Type', 'options' => array('email' => 'email', 'number' => 'number'), 'empty' => true));
+	echo $this->Form->hidden('FormInput.validation_message', array('after' => '<small>not currently used, but will be available in future versions</small>'));
 
-	// Should the field be prepopulated with any data?
-	echo $this->Form->input('FormInput.system_default_value', array('empty' => true, 'options' => array('current user' => 'current user')));
-	echo $this->Form->input('FormInput.default_value');
+	echo $this->Html->tag('fieldset',
+			// Should the field be prepopulated with any data?
+			$this->Html->tag('legend', 'Advanced Options', array('class' => 'toggleClick'))
+			. $this->Form->input('FormInput.system_default_value', array('empty' => true, 'options' => array('current user' => 'current user')))
+			. $this->Form->input('FormInput.default_value')
 
-	// Do you want anything around the input (usually for help text)?
-	echo $this->Form->input('FormInput.before');
-	echo $this->Form->input('FormInput.separator');
-	echo $this->Form->input('FormInput.after');
-	echo $this->Form->input('FormInput.div_id', array('type' => 'text', 'after' => ' a custom id for the div around this input'));
-	echo $this->Form->input('FormInput.div_class', array('after' => ' a custom class for the div around this input'));
-	echo $this->Form->input('FormInput.error_message', array('after' => ' a custom error message for this input'));
+			// Do you want anything around the input (usually for help text)?
+			. $this->Form->input('FormInput.before')
+			. $this->Form->input('FormInput.separator')
+			. $this->Form->input('FormInput.after')
+			. $this->Form->input('FormInput.div_id', array('type' => 'text', 'after' => '<small>a custom id for the div around this input</small>'))
+			. $this->Form->input('FormInput.div_class', array('after' => '<small>a custom class for the div around this input</small>'))
+			. $this->Form->input('FormInput.error_message', array('after' => '<small>a custom error message for this input</small>'))
+	);
 
 	// Mostly unused field options for future use.
-	echo $this->Form->input('FormInput.is_unique');
-	echo $this->Form->input('FormInput.is_system');
-	echo $this->Form->input('FormInput.is_quicksearch');
-	echo $this->Form->input('FormInput.is_advancedsearch');
-	echo $this->Form->input('FormInput.is_comparable');
-	echo $this->Form->input('FormInput.is_layered');
-	echo $this->Form->input('FormInput.layer_order');
+	echo $this->Form->hidden('FormInput.is_unique');
+	echo $this->Form->hidden('FormInput.is_system');
+	echo $this->Form->hidden('FormInput.is_quicksearch');
+	echo $this->Form->hidden('FormInput.is_advancedsearch');
+	echo $this->Form->hidden('FormInput.is_comparable');
+	echo $this->Form->hidden('FormInput.is_layered');
+	echo $this->Form->hidden('FormInput.layer_order');
 	?>
 </div>
 

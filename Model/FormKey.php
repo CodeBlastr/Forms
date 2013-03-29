@@ -26,7 +26,7 @@ class FormKey extends FormsAppModel {
 
 /**
  * Create keys as needed
- * 
+ *
  * @return string
  */
 	public function createKey() {
@@ -43,7 +43,7 @@ class FormKey extends FormsAppModel {
 
 /**
  * Expire any keys older than an hour
- * 
+ *
  * @return bool
  */
  	public function expireKeys() {
@@ -53,7 +53,7 @@ class FormKey extends FormsAppModel {
 			throw new Exception(__('Expiring keys failed.'));
 		}
  	}
-	
+
 /**
  * Test a key to see if it exists and expire keys while we're here
  */

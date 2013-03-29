@@ -15,7 +15,7 @@
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2012, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaï¿½ Project
  * @package       zuha
  * @subpackage    zuha.app.plugins.forms.controllers
  * @since         Zuha(tm) v 0.0.1
@@ -46,9 +46,9 @@ class FormInputsController extends FormsAppController {
  * @todo 			formInputs need all the form options that cakephp has, so that you can easily make a database driven form
  * @todo			Move the second part of this save to the model, so that it is simply part of the save operation, and can be reused.
  */
-	public function add() {
+	public function add($fieldsetId = null) {
 		if (!empty($this->request->data['FormInput'])) {
-			# create the formInput
+			// create the formInput
 			try {
 				$this->Form->FormInput->add($this->request->data);
 				$this->Session->setFlash(__('Input Successfully Added!'));
@@ -58,9 +58,44 @@ class FormInputsController extends FormsAppController {
 			}
 		}
 		
-		# variables needed for display of the view
-		$formFieldsets = $this->FormInput->FormFieldset->find('list');
+		// variables needed for display of the view
+		if ( $fieldsetId === null ) {
+			$params = null;
+		} else {
+			$params = array('conditions'=>array('FormFieldset.id' => $fieldsetId));
+		}
+		$formFieldsets = $this->FormInput->FormFieldset->find('list', $params);
+		
 		$this->set(compact('formFieldsets'));
+		$this->set('inputTypes', $this->FormInput->inputTypes());
+		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
+	}
+	
+	/**
+	 * @todo Need to check to see if this user is authorized to be adding inputs to this Form.id
+	 * @param type $formId
+	 */
+	public function create($formId = null) {
+		if (!empty($this->request->data['FormInput'])) {
+			// create the formInput
+			try {
+				$this->Form->FormInput->add($this->request->data);
+				$this->Session->setFlash(__('Input Successfully Added!'));
+				$this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
+			} catch (Exception $e) {
+				$this->Session->setFlash($e->getMessage());
+			}
+		}
+		
+		// variables needed for display of the view
+		if ( $formId === null ) {
+			$params = null;
+		} else {
+			$params = array('conditions'=>array('Form.id' => $formId));
+		}
+		$forms = $this->FormInput->Form->find('list', $params);
+		
+		$this->set(compact('forms'));
 		$this->set('inputTypes', $this->FormInput->inputTypes());
 		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
 	}
@@ -76,7 +111,7 @@ class FormInputsController extends FormsAppController {
  */
 	public function edit($id = null) {
 		if (!empty($this->request->data)) {
-			# create the formInput
+			// create the formInput
 			if($this->FormInput->save($this->request->data)) {
 				$this->Session->setFlash(__('Input Successfully Edited!', true));
 				$this->redirect(array('action' => 'index'));
@@ -106,4 +141,3 @@ class FormInputsController extends FormsAppController {
 	}
 
 }
-?>

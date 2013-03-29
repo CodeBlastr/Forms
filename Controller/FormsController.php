@@ -35,12 +35,16 @@ class FormsController extends FormsAppController {
 		$this->set('forms', $this->paginate());
 	}
 
-	public function add() {
+	public function add($type = 'default', $foreignModel = null, $foreignKey = null) {
 		if (!empty($this->request->data)) {
 			try {
 				$this->Form->add($this->request->data);
 				$this->Session->setFlash(__('The Form has been saved', true));
-				$this->redirect(array('action'=>'index'));
+				if ( $type === 'formanswer' ) {
+					$this->redirect(array('controller'=>'formFieldsets', 'action'=>'add', $this->Form->id));
+				} else {
+					$this->redirect(array('action'=>'index'));
+				}
 			} catch (Exception $e) {
 				$this->Session->setFlash($e->getMessage());
 			}
@@ -48,6 +52,11 @@ class FormsController extends FormsAppController {
 
 		$this->set('methods', $this->Form->methods());
 		$this->set('copies', $this->Form->copyTypes());
+		
+		$this->set('foreignModel', $foreignModel);
+		$this->set('foreignKey', $foreignKey);
+		
+		$this->view = 'add_' . $type;
 	}
 
 /**
@@ -286,14 +295,14 @@ class FormsController extends FormsAppController {
  		}	
 		
 		// in domain test
- 		//$statsEntry = $this->Session->read('Stats.entry');
- 		//$time = time() - base64_decode($statsEntry);
-		//if ($time > 10 && $time < 100001) {
-	    //	return true;
-		//} else {
-		//	echo 'uncaught exception : 329857769196719876928723';
-		//	break;
-		//}
+ 		$statsEntry = $this->Session->read('Stats.entry');
+ 		$time = time() - base64_decode($statsEntry);
+		if ($time > 10 && $time < 100001) {
+	    	return true;
+		} else {
+			echo 'uncaught exception : 329857769196719876928723';
+			break;
+		}
         echo 'uncaught exception : 2394982379428374';
         break;
  	}

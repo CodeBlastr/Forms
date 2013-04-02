@@ -75,26 +75,23 @@ class FormInputsController extends FormsAppController {
 	 * @todo Need to check to see if this user is authorized to be adding inputs to this Form.id
 	 * @param type $formId
 	 */
-	public function create($formId = null) {
-		if (!empty($this->request->data['FormInput'])) {
+	public function create($formId) {
+		if ( !empty($this->request->data['FormInput']) ) {
+//			debug($this->request->data);break;
 			// create the formInput
 			try {
-				$this->Form->FormInput->add($this->request->data);
-				$this->Session->setFlash(__('Input Successfully Added!'));
-				$this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
+				foreach ( $this->request->data['FormInput'] as $formInput ) {
+					$this->FormInput->add($formInput);
+				}
+				$this->Session->setFlash(__('Inputs Successfully Added!'));
 			} catch (Exception $e) {
 				$this->Session->setFlash($e->getMessage());
 			}
+			$this->redirect(array('controller' => 'forms', 'action' => 'edit', $formId));
 		}
-		
-		// variables needed for display of the view
-		if ( $formId === null ) {
-			$params = null;
-		} else {
-			$params = array('conditions'=>array('Form.id' => $formId));
-		}
-		$forms = $this->FormInput->Form->find('list', $params);
-		
+
+		$forms = $this->FormInput->Form->find('first', array('conditions' => array('Form.id' => $formId)));
+
 		$this->set(compact('forms'));
 		$this->set('inputTypes', $this->FormInput->inputTypes());
 		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());

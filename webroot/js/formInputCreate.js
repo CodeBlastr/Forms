@@ -25,12 +25,13 @@ $(document).ready(function() {
    * @returns {void}
    */
   function updateFormInputOrders() {
+	
 	var newOrder = 0
 	$("#formInputs div.usableInput").each(function() {
 	  if ($(this).attr("id") !== undefined) {
 		var formInputIndex = $(this).attr("data-formInput-x");
-		$("#FormInput" + formInputIndex + "Order").val(newOrder);
-		$("#FormInput" + formInputIndex + "ModelOverride").val("FormAnswer."+newOrder);
+		$("#FormInput" + formInputIndex + "Order").val( newOrder );
+		//$("#FormInput" + formInputIndex + "ModelOverride").val( "FormAnswer."+newOrder );
 		newOrder++;
 	  }
 	});
@@ -42,6 +43,7 @@ $(document).ready(function() {
    * @returns {void}
    */
   function updateInputsArray(currentInputType) {
+	
 	if ($.inArray(currentInputType, inputs) === -1) {
 	  inputs.push(currentInputType);
 	  inputs[currentInputType] = 0;
@@ -56,6 +58,7 @@ $(document).ready(function() {
    * @returns {void}
    */
   function afterDroppableDrop(ui) {
+	
 	if ($.inArray(newId, usedIds) === -1) {
 	  usedIds.push(newId);
 	  ui.draggable.attr("id", newId).attr("data-formInput-x", usedIds.length - 1);
@@ -71,21 +74,30 @@ $(document).ready(function() {
    * @returns {void}
    */
   function createInputCopies() {
+	
+	// create a copy of the inputs
 	$("<div />")
 		.html($("#formMaster").html())
 		.attr("id", "config_" + newId)
 		.attr("class", "configPanel")
 		.appendTo("#inputOptions form");
+	// configure the copied inputs
+	var currentIndex = usedIds.length - 1;
 	$("#config_" + newId + " input, #config_" + newId + " select, #config_" + newId + " textarea").each(function(index, element) {
 	  var indexedName = $(this).attr("name");
 	  var indexedId = $(this).attr("id");
 	  if (indexedName !== undefined) {
-		var currentIndex = usedIds.length - 1;
 		indexedName = indexedName.replace("FormInput]", "FormInput][" + currentIndex + "]");
 		indexedId = indexedId.replace("FormInput", "FormInput" + currentIndex);
 		$(this).attr("name", indexedName).attr("id", indexedId);
 	  }
 	});
+	$("#config_" + newId + " label").each(function(index, element) {
+	  var indexedFor = $(this).attr("for");
+	  indexedFor = indexedFor.replace("FormInput", "FormInput" + currentIndex);
+	  $(this).attr('for', indexedFor);
+	});
+	$("#FormInput"+currentIndex+"InputType").val( newId.substr(0, newId.indexOf('_')) );
   }
 
   /**
@@ -94,6 +106,7 @@ $(document).ready(function() {
    * @returns {void}
    */
   function displayConfigPanel() {
+	
 	var configToShow = newId.substr(0, newId.indexOf('_'));
 	if ($.inArray(configToShow, ["checkbox", "radio"]) !== -1) {
 	  configToShow = "multiple";

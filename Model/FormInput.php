@@ -39,12 +39,12 @@ class FormInput extends FormsAppModel {
 	    	),
 		'name' => array('notempty'),
 		'input_type' => array('notempty'),
-		'is_unique' => array('notempty'),
-		'is_required' => array('notempty'),
-		'is_quicksearch' => array('notempty'),
-		'is_advancedsearch' => array('notempty'),
-		'is_comparable' => array('notempty'),
-		'is_layered' => array('notempty'),
+//		'is_unique' => array('notempty'),
+//		'is_required' => array('notempty'),
+//		'is_quicksearch' => array('notempty'),
+//		'is_advancedsearch' => array('notempty'),
+//		'is_comparable' => array('notempty'),
+//		'is_layered' => array('notempty'),
 		); 
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -91,9 +91,11 @@ class FormInput extends FormsAppModel {
  * @param {data} 			Data to parse and save.
  */
 	public function add($data) {
+		$this->create($data);
 		if ($this->save($data)) {
 			if (!empty($data['FormInput']['is_duplicate'])) {
-				// validation checks to see if the field already exists, but that does not disqualify it from working, just need to throw a warning so the user can rename if they need to.
+				// validation checks to see if the field already exists, but that does not disqualify it from working,
+				// just need to throw a warning so the user can rename if they need to.
 				return true;
 			} else if (!empty($data['FormInput']['is_not_db_field'])) {
 				// if the field doesn't need to be saved to the database we don't need to do anything but save the input
@@ -114,9 +116,9 @@ class FormInput extends FormsAppModel {
 			}
 		} else {
 			$errors = '';
-			foreach ($this->invalidFields() as $key => $error) :
+			foreach ($this->invalidFields() as $key => $error) {
 				$errors .= $error[0];
-			endforeach;
+			}
 			throw new Exception(__('%s', $errors));
 		}
 	}
@@ -162,7 +164,8 @@ class FormInput extends FormsAppModel {
  * Finds all the formInputs for the specified model and type.
  *
  * @param {model}		The model the fieldset belongsTo.
- * @param {typeId}		A limiter or predefined field which can be used to change the formInputs that in the end get displayed. Refer to the enumerations table for id numbers.
+ * @param {typeId}		A limiter or predefined field which can be used to change the formInputs that in the end get displayed. 
+ *						Refer to the enumerations table for id numbers.
  * @param {options] 	Additional directions for what formInputs to find.
  * @return 				The optionally limited formInputs for the specified model. 
  */
@@ -226,7 +229,8 @@ class FormInput extends FormsAppModel {
 	
 	
 /**
- * Checks to see the field name already exists in this table.  Because if it does we shouldn't add it to the table, but we should see if we need to duplicate for another fieldset, so that we can reuse the same fields across multiple record types.
+ * Checks to see the field name already exists in this table.  Because if it does we shouldn't add it to the table,
+ *  but we should see if we need to duplicate for another fieldset, so that we can reuse the same fields across multiple record types.
  *
  * @param {code}		The formInput to check for.  An array with at least values for 'form_fieldset_id' and 'code'.
  * @return {BOOL}		unless is_duplicate is set it checks to see if the field exists, if is_duplicate is set, then save.

@@ -8,10 +8,10 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 	<div class="span4">
 		<div id="usableInputs">
 			<b>Elements</b><hr/>
-			<div class="usableInput" id="textbox">Abc</div>
+			<div class="usableInput" id="label"><label>Abc</label></div>
 			<div class="usableInput" id="checkbox"><input type="checkbox" disabled="disabled"> <label>Checkbox</label></div>
 			<div class="usableInput" id="radio"><input type="radio" disabled="disabled"> <label>Radio Button</label></div>
-			<div class="usableInput" id="textline"><label>Text Line</label> <input type="text" disabled="disabled"></div>
+			<div class="usableInput" id="text"><label>Text Line</label> <input type="text" disabled="disabled"></div>
 			<div class="usableInput" id="textarea"><label>Textarea</label> <textarea disabled="disabled"></textarea></div>
 			<div class="usableInput" id="fileselect"><label>Upload a File</label> <input type="file" disabled="disabled"></div>
 		</div>
@@ -37,18 +37,19 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 	echo (isset($duplicate) ? $this->Form->input('is_duplicate', array('type' => 'hidden', 'value' => '1')) : '');
 	echo $this->Form->input('FormInput.name', array('label' => 'Label', 'class'=>'FormInputName'));
 	echo $this->Form->input('FormInput.show_label', array('label' => 'Display the Label?'));
+	echo $this->Form->input('FormInput.expected_value', array('label' => 'Expected Answer'));
 	echo $this->Form->hidden('FormInput.form_id', array('value' => $forms['Form']['id']));
 	echo $this->Form->hidden('FormInput.order');
 	echo $this->Form->hidden('FormInput.input_type');
-	echo $this->Form->hidden('FormInput.is_visible', array('checked' => 'checked'));
-	echo $this->Form->hidden('FormInput.is_addable', array('checked' => 'checked'));
-	echo $this->Form->hidden('FormInput.is_editable', array('checked' => 'checked'));
+	echo $this->Form->hidden('FormInput.is_visible', array('value' => '1'));
+	echo $this->Form->hidden('FormInput.is_addable', array('value' => '1'));
+	echo $this->Form->hidden('FormInput.is_editable', array('value' => '1'));
 
 	// Text field options
 	echo $this->Html->tag('div', $this->Form->input('FormInput.min_length', array('class' => 'input-mini', 'min' => 0, 'div' => array('class' => 'span6')))
 			. $this->Form->input('FormInput.max_length', array('class' => 'input-mini', 'min' => 0, 'div' => array('class' => 'span6')))
 			. $this->Form->input('FormInput.placeholder', array('placeholder' => 'this is a "placeholder"'))
-			, array('class' => 'textlineConfig hiddenConfig')
+			, array('class' => 'textConfig hiddenConfig')
 	);
 
 	// Textarea field options
@@ -59,8 +60,8 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 
 	// Selects, checkboxes, and multi-selects, and radio sets options
 	echo $this->Html->tag('div', $this->Form->input('FormInput.legend', array('after' => '<small>text above radio input types</small>'))
-			. $this->Form->input('FormInput.multiple', array('options' => array('1' => 'Yes', 'checkbox' => 'Checkbox') ))//, 'after' => ' valid values are 1 or checkbox'))
-			. $this->Form->hidden('FormInput.empty_text', array('after' => '<small>text for null value in select drop downs</small>', 'value' => '-- select one --'))
+			. $this->Form->input('FormInput.multiple', array('options' => array('1' => 'Yes', 'checkbox' => 'Checkbox'), 'empty' => true ))//, 'after' => ' valid values are 1 or checkbox'))
+			. $this->Form->hidden('FormInput.empty_text', array('after' => '<small>text for null value in select drop downs</small>', 'empty' => '-- select one --'))
 			. $this->Form->input('FormInput.option_values', array('class'=>'FormInputOptionValues hidden', 'label' => false))
 			. $this->Form->input('FormInput.option_names', array('class'=>'FormInputOptionNames') )//, array('after' => '<small>must have the same number of lines</small>'))
 			, array('class' => 'multipleConfig hiddenConfig')
@@ -77,8 +78,9 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 
 	// How should the information be treated in the database?
 	echo $this->Form->hidden('FormInput.code', array('value' => 'answer'));
-	echo $this->Form->hidden('FormInput.is_not_db_field', array('checked' => 'checked'));
-	echo $this->Form->hidden('FormInput.model_override');
+	echo $this->Form->hidden('FormInput.is_not_db_field', array('value' => '1'));
+	echo $this->Form->hidden('FormInput.is_duplicate', array('value' => '1'));
+	echo $this->Form->hidden('FormInput.model_override', array('value' => 'FormAnswer'));
 
 	// Would you like ajax validation rules and messages?
 	echo $this->Form->input('FormInput.is_required');

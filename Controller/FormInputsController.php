@@ -90,9 +90,9 @@ class FormInputsController extends FormsAppController {
 			$this->redirect(array('controller' => 'forms', 'action' => 'edit', $formId));
 		}
 
-		$forms = $this->FormInput->Form->find('first', array('conditions' => array('Form.id' => $formId)));
+		//$forms = $this->FormInput->Form->find('first', array('conditions' => array('Form.id' => $formId)));
 
-		$this->set(compact('forms'));
+		$this->set(compact('formId'));
 		$this->set('inputTypes', $this->FormInput->inputTypes());
 		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
 	}

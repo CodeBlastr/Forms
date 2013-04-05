@@ -41,7 +41,7 @@ class FormsController extends FormsAppController {
 				$this->Form->add($this->request->data);
 				$this->Session->setFlash(__('The Form has been saved', true));
 				if ( $type === 'formanswer' ) {
-					$this->redirect(array('controller'=>'formFieldsets', 'action'=>'add', $this->Form->id));
+					$this->redirect(array('controller'=>'formInputs', 'action'=>'create', $this->Form->id));
 				} else {
 					$this->redirect(array('action'=>'index'));
 				}

@@ -36,14 +36,14 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 	// How should the field appear in the form?
 	echo (isset($duplicate) ? $this->Form->input('is_duplicate', array('type' => 'hidden', 'value' => '1')) : '');
 	echo $this->Form->input('FormInput.name', array('label' => 'Label', 'class'=>'FormInputName'));
-	echo $this->Form->input('FormInput.show_label', array('label' => 'Display the Label?'));
+	echo $this->Form->input('FormInput.show_label', array('value' => '1', 'checked' => true, 'label' => 'Display the Label?'));
 	echo $this->Form->input('FormInput.expected_value', array('label' => 'Expected Answer'));
-	echo $this->Form->hidden('FormInput.form_id', array('value' => $forms['Form']['id']));
+	echo $this->Form->hidden('FormInput.form_id', array('value' => $formId));
 	echo $this->Form->hidden('FormInput.order');
 	echo $this->Form->hidden('FormInput.input_type');
-	echo $this->Form->hidden('FormInput.is_visible', array('value' => '1'));
-	echo $this->Form->hidden('FormInput.is_addable', array('value' => '1'));
-	echo $this->Form->hidden('FormInput.is_editable', array('value' => '1'));
+	echo $this->Form->hidden('FormInput.is_visible', array('value' => '1', 'checked' => true));
+	echo $this->Form->hidden('FormInput.is_addable', array('value' => '1', 'checked' => true));
+	echo $this->Form->hidden('FormInput.is_editable', array('value' => '1', 'checked' => true));
 
 	// Text field options
 	echo $this->Html->tag('div', $this->Form->input('FormInput.min_length', array('class' => 'input-mini', 'min' => 0, 'div' => array('class' => 'span6')))
@@ -83,7 +83,7 @@ echo $this->Html->script('/forms/js/formInputCreate.js', array('inline' => false
 	echo $this->Form->hidden('FormInput.model_override', array('value' => 'FormAnswer'));
 
 	// Would you like ajax validation rules and messages?
-	echo $this->Form->input('FormInput.is_required');
+	echo $this->Form->input('FormInput.is_required', array('value' => '1', 'checked' => true));
 	echo $this->Form->hidden('FormInput.validation', array('type' => 'select', 'label' => 'Validation Type', 'options' => array('email' => 'email', 'number' => 'number'), 'empty' => true));
 	echo $this->Form->hidden('FormInput.validation_message', array('after' => '<small>not currently used, but will be available in future versions</small>'));
 

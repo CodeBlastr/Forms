@@ -86,6 +86,7 @@ class Form extends FormsAppModel {
 
 /**
  * Used to display correct view of form inputs (add, edit, view)
+ * Also used to retrieve form array for FormAnswer
  *
  * @param {id} 			id of the form to display, or an array with keys plugin(optional), and model to look up the form
  * @param {type}		valid values are add, edit, view

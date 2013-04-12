@@ -31,7 +31,7 @@ $(document).ready(function() {
 	  if ($(this).attr("id") !== undefined) {
 		var formInputIndex = $(this).attr("data-formInput-x");
 		$("#FormInput" + formInputIndex + "Order").val( newOrder );
-		//$("#FormInput" + formInputIndex + "ModelOverride").val( "FormAnswer."+newOrder );
+		$("#FormInput" + formInputIndex + "ModelOverride").val( "FormAnswer."+newOrder );
 		newOrder++;
 	  }
 	});
@@ -98,6 +98,7 @@ $(document).ready(function() {
 	  $(this).attr('for', indexedFor);
 	});
 	$("#FormInput"+currentIndex+"InputType").val( newId.substr(0, newId.indexOf('_')) );
+	$("#FormInput"+currentIndex+"ModelOverride").val( 'FormAnswer.'+currentIndex );
   }
 
   /**

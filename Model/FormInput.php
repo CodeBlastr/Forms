@@ -93,27 +93,27 @@ class FormInput extends FormsAppModel {
 	public function add($data) {
 		$this->create($data);
 		if ($this->save($data)) {
-			if (!empty($data['FormInput']['is_duplicate'])) {
-				// validation checks to see if the field already exists, but that does not disqualify it from working,
-				// just need to throw a warning so the user can rename if they need to.
-				return true;
-			} else if (!empty($data['FormInput']['is_not_db_field'])) {
-				// if the field doesn't need to be saved to the database we don't need to do anything but save the input
-				return true;
-			} else {
-				if ($this->_addField($data['FormInput'])) {
-					return true;
-				} else {
-					// rollback form input save
-					if ($this->delete($this->id)) {
-						return false;
-					} else {
-					    throw new NotFoundException('Uncaught error code : 102398102983120398');
-//						echo 'Uncaught error code : 102398102983120398';
-//						break;
-					} 
-				}
-			}
+			// db editing is disabled for now 4/30/2013 rk
+			// if (!empty($data['FormInput']['is_duplicate'])) {
+				// // validation checks to see if the field already exists, but that does not disqualify it from working,
+				// // just need to throw a warning so the user can rename if they need to.
+				// return true;
+			// } else if (!empty($data['FormInput']['is_not_db_field'])) {
+				// // if the field doesn't need to be saved to the database we don't need to do anything but save the input
+				// return true;
+			// } else {
+				// if ($this->_addField($data['FormInput'])) {
+					// return true;
+				// } else {
+					// // rollback form input save
+					// if ($this->delete($this->id)) {
+						// return false;
+					// } else {
+					    // throw new NotFoundException('Uncaught error code : 102398102983120398');
+					// } 
+				// }
+			// }
+			return true;
 		} else {
 			$errors = '';
 			foreach ($this->invalidFields() as $key => $error) {

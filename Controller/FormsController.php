@@ -89,7 +89,7 @@ class FormsController extends FormsAppController {
 				$this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
 			} catch (Exception $e) {
 				$this->Session->setFlash($e->getMessage());
-				$this->set('duplicate', true);
+				// $this->set('duplicate', true); // db editing disabled
 			}
 		}
 

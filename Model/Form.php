@@ -33,19 +33,6 @@ class Form extends FormsAppModel {
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	public $hasMany = array(
-		'FormFieldset' => array(
-			'className' => 'Forms.FormFieldset',
-			'foreignKey' => 'form_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-			),
 		'FormInput' => array(
 			'className' => 'Forms.FormInput',
 			'foreignKey' => 'form_id',

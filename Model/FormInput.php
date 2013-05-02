@@ -25,20 +25,22 @@ class FormInput extends FormsAppModel {
 
 	public $name = 'FormInput';
 	
+	public $actAs = array('tree');
+	
 	public $validate = array(
-	    'code' => array(
-			'characterCheck' => array(
-		    	'rule' => '/^[a-z0-9_]{2,50}$/i',  
-		        'message' => 'Only lowercase letters, integers, underscores, and min 2 and 50 characters'
-				),
-			'firstCodeCheck' => array(
-				'rule' => array('_initialCodeCheck', 'is_duplicate'),
-				'message' => 'Are you sure you want to use this name?  This field already exists in the database.',
-				'on' => 'create',
-				),
-	    	),
-		'name' => array('notempty'),
-		'input_type' => array('notempty'),
+	    // 'code' => array(
+			// 'characterCheck' => array(
+		    	// 'rule' => '/^[a-z0-9_]{2,50}$/i',  
+		        // 'message' => 'Only lowercase letters, integers, underscores, and min 2 and 50 characters'
+				// ),
+			// 'firstCodeCheck' => array(
+				// 'rule' => array('_initialCodeCheck', 'is_duplicate'),
+				// 'message' => 'Are you sure you want to use this name?  This field already exists in the database.',
+				// 'on' => 'create',
+				// ),
+	    	// ),
+		//'name' => array('notempty'),
+		//'input_type' => array('notempty'),
 //		'is_unique' => array('notempty'),
 //		'is_required' => array('notempty'),
 //		'is_quicksearch' => array('notempty'),
@@ -49,13 +51,6 @@ class FormInput extends FormsAppModel {
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	public $belongsTo = array(
-		'FormFieldset' => array(
-			'className' => 'Forms.FormFieldset',
-			'foreignKey' => 'form_fieldset_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'Form' => array(
 			'className' => 'Forms.Form',
 			'foreignKey' => 'form_id',
@@ -74,6 +69,12 @@ class FormInput extends FormsAppModel {
 			'order' => ''
 		)
 	);
+	
+	//Form types allowed
+	public $inputTypes = array('button', 'checkbox', 'date', 'datetime', 'email', 'file', 'hidden', 'image', 'radio', 'text');
+	
+	//Allowed tag types
+	public $tagTypes = array('input', 'fieldset', 'select', 'textarea');
 
 
 
@@ -450,21 +451,21 @@ class FormInput extends FormsAppModel {
  *
  * @return {array}		An array of form input types.
  */
-	public function inputTypes() {
-		return array(
-				'text' => 'text',
-				'textarea' => 'textarea',
-				'date' => 'date',
-				'time' => 'time',
-				'datetime' => 'datetime',
-				'select' => 'select',
-				'checkbox' => 'checkbox',
-				'radio' => 'radio',
-				'hidden' => 'hidden',
-				'password' => 'password',
-				'file' => 'file',
-				);
-	}
+	// public function inputTypes() {
+		// return array(
+				// 'text' => 'text',
+				// 'textarea' => 'textarea',
+				// 'date' => 'date',
+				// 'time' => 'time',
+				// 'datetime' => 'datetime',
+				// 'select' => 'select',
+				// 'checkbox' => 'checkbox',
+				// 'radio' => 'radio',
+				// 'hidden' => 'hidden',
+				// 'password' => 'password',
+				// 'file' => 'file',
+				// );
+	// }
 	
 /**
  * Available default values

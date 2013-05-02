@@ -75,23 +75,20 @@ class FormsController extends FormsAppController {
  * Edit method
  *
  */
-	public function edit($id = null, $formInputId = null) {
+	public function edit($id = null) {
 		$this->Form->id = $id;
-		if (!$this->Form->exists()) {
-			throw new NotFoundException(__('Invalid form.'));
-		}
-
-		if (!empty($this->request->data['FormInput'])) {
-			// create the formInput
-			try {
-				$this->Form->FormInput->add($this->request->data);
-				$this->Session->setFlash(__('Input Successfully Added!'));
-				$this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
-			} catch (Exception $e) {
-				$this->Session->setFlash($e->getMessage());
-				$this->set('duplicate', true);
-			}
-		}
+		
+		// if (!empty($this->request->data['FormInput'])) {
+			// // create the formInput
+			// try {
+				// $this->Form->FormInput->add($this->request->data);
+				// $this->Session->setFlash(__('Input Successfully Added!'));
+				// $this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
+			// } catch (Exception $e) {
+				// $this->Session->setFlash($e->getMessage());
+				// $this->set('duplicate', true);
+			// }
+		// }
 
 		if (!empty($this->request->data['Form'])) {
 			try {
@@ -101,12 +98,14 @@ class FormsController extends FormsAppController {
 			} catch (Exception $e) {
 				$this->Session->setFlash(__('The Form could not be saved. Please, try again.'));
 			}
+		}else {
+			
 		}
-		$formInput = !empty($formInputId) ? $this->Form->FormInput->read(null, $formInputId) : array();
+		//$formInput = !empty($formInputId) ? $this->Form->FormInput->read(null, $formInputId) : array();
 		$this->request->data = array_merge($this->Form->read(null, $id), $formInput, $this->request->data);
-		$this->set('methods', $this->Form->methods());
-		$this->set('inputTypes', $this->Form->FormInput->inputTypes());
-		$this->set('systemDefaultValues', $this->Form->FormInput->systemDefaultValues());
+		//$this->set('methods', $this->Form->methods());
+		//$this->set('inputTypes', $this->Form->FormInput->inputTypes);
+		//$this->set('systemDefaultValues', $this->Form->FormInput->systemDefaultValues());
 	}
 
 /**
@@ -152,22 +151,6 @@ class FormsController extends FormsAppController {
 	protected function _specialData() {
 		return array('user_id' => $this->Session->read('Auth.User.id'));
 	}
-	
-	
-/**
- * Create a key for remote forms to use (and delete any keys older than an hour)
- * must be called like this... http://www.example.com/forms/forms/secure.json
- */
- 	public function secure() {
- 		try {
- 			App::uses('FormKey', 'Forms.Model');
-			$FormKey = new FormKey();
- 			$this->set('key', $FormKey->createKey());
- 		} catch (Exception $e) {
-			$this->Session->setFlash($e->getMessage());
-		}
- 	}
-
 
 /**
  * Takes a custom form and processes it using the model->action from the form settings.
@@ -262,50 +245,50 @@ class FormsController extends FormsAppController {
  *	})
  * </script>
  */
- 	protected function _checkSecurity() {
- 		// defined key test
-        if (defined('__FORMS_KEYS') && !empty($this->request->data['FormKey']['key'])) {
-            $success = false;
-            $keys = unserialize(__FORMS_KEYS);
-            if (!empty($keys['key'][0])) {
-                foreach ($keys['key'] as $key) {
-                    if ($this->request->data['FormKey']['key'] == $key) {
-                        $success = true;
-                        break;
-                    }
-                }
-                if ($success === true) {
-                    return $success;
-                } else {
-        			echo 'uncaught exception : 727273487128347123';
-    				break; 	
-                }
-            }
-        }
-		// cross domain test
- 		if (!empty($this->request->data['FormKey']['id'])) {
- 			App::uses('FormKey', 'Forms.Model');
-			$FormKey = new FormKey();
- 			if ($success = $FormKey->testKey($this->request->data)) {
- 				return $success;
- 			} else {
-				echo 'uncaught exception : 8638678967189768976123894';
-				break; 				
- 			}
- 		}	
-		
-		// in domain test
- 		$statsEntry = $this->Session->read('Stats.entry');
- 		$time = time() - base64_decode($statsEntry);
-		if ($time > 10 && $time < 100001) {
-	    	return true;
-		} else {
-			echo 'uncaught exception : 329857769196719876928723';
-			break;
-		}
-        echo 'uncaught exception : 2394982379428374';
-        break;
- 	}
+ 	// protected function _checkSecurity() {
+ 		// // defined key test
+        // if (defined('__FORMS_KEYS') && !empty($this->request->data['FormKey']['key'])) {
+            // $success = false;
+            // $keys = unserialize(__FORMS_KEYS);
+            // if (!empty($keys['key'][0])) {
+                // foreach ($keys['key'] as $key) {
+                    // if ($this->request->data['FormKey']['key'] == $key) {
+                        // $success = true;
+                        // break;
+                    // }
+                // }
+                // if ($success === true) {
+                    // return $success;
+                // } else {
+        			// echo 'uncaught exception : 727273487128347123';
+    				// break; 	
+                // }
+            // }
+        // }
+		// // cross domain test
+ 		// if (!empty($this->request->data['FormKey']['id'])) {
+ 			// App::uses('FormKey', 'Forms.Model');
+			// $FormKey = new FormKey();
+ 			// if ($success = $FormKey->testKey($this->request->data)) {
+ 				// return $success;
+ 			// } else {
+				// echo 'uncaught exception : 8638678967189768976123894';
+				// break; 				
+ 			// }
+ 		// }	
+// 		
+		// // in domain test
+ 		// $statsEntry = $this->Session->read('Stats.entry');
+ 		// $time = time() - base64_decode($statsEntry);
+		// if ($time > 10 && $time < 100001) {
+	    	// return true;
+		// } else {
+			// echo 'uncaught exception : 329857769196719876928723';
+			// break;
+		// }
+        // echo 'uncaught exception : 2394982379428374';
+        // break;
+ 	// }
 
 
 /**

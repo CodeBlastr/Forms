@@ -89,7 +89,7 @@ class FormsController extends FormsAppController {
 				$this->redirect(array('controller' => 'forms', 'action' => 'edit', $this->request->data['FormInput']['form_id']));
 			} catch (Exception $e) {
 				$this->Session->setFlash($e->getMessage());
-				// $this->set('duplicate', true); // db editing disabled
+				$this->set('duplicate', true); // db editing disabled
 			}
 		}
 
@@ -177,7 +177,7 @@ class FormsController extends FormsAppController {
  */
 	public function process() {
 		$this->Session->delete('errors');
-		if (!empty($this->request->data)) {
+		if (!empty($this->request->data['Form'])) {
 			$this->_checkSecurity();
 			$plugin = $this->request->data['Form']['plugin'];
 			$this->modelName = $this->request->data['Form']['model'];

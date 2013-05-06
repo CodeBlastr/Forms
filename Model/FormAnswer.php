@@ -35,17 +35,9 @@ class FormAnswer extends FormsAppModel {
 	/**
 	 * Saves answers from a Q&A form
 	 * 
-	 * @todo Move to a model !
-	 * 
 	 * @param array $data
 	 */
 	public function record($data) {
-
-//		$form = $this->FormInput->Form->find('first', array(
-//			'conditions' => array(
-//				'Form.id' => $data['Form']['id']
-//			)
-//		));
 		
 		// save the answer
 		$form = $this->FormInput->Form->display($data['Form']['id']);
@@ -59,20 +51,19 @@ class FormAnswer extends FormsAppModel {
 		}
 
 		if ( $this->saveMany($data['FormAnswer']) ) {
-			/** @TODO :  CHANGE THIS TO BE A CALLBACK TO THE Form.foreign_model !!! */
-			// save an empty grade for the teacher to grade later
-			App::uses('Grade', 'Courses.Model');
-			$Grade = new Grade;
-			$grade['Grade']['form_id'] = $data['Form']['id'];
-			$grade['Grade']['student_id'] = CakeSession::read('Auth.User.id');
-			$grade['Grade']['course_id'] = $form['Form']['foreign_key'];
-
-			if ( $Grade->save($grade) ) {
-				return true;
-			} else {
-				die('x');
-				throw new Exception('Grade did not initialize.');
+			// fire a callback to Form.foreign_model if necessary
+			try {
+				App::uses($form['Form']['foreign_model'], ZuhaInflector::pluginize($form['Form']['foreign_model']).'.Model');
+				$Model = new $form['Form']['foreign_model'];
+				if( method_exists($Model,'afterFormAnswerRecord') && is_callable(array($Model,'afterFormAnswerRecord')) ) {
+			    	return $Model->afterFormAnswerRecord($form, $data);
+				} else {
+					return true;
+				}
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
 			}
+
 		} else {
 			throw new Exception('Form Answers did not save.');
 		}

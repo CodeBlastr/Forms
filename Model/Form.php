@@ -147,7 +147,8 @@ class Form extends FormsAppModel {
 				'conditions' => array(
 					'Form.id' => $data['Form']['id'],
 					),
-				));
+				'fields' => array('response_email', 'notifiees', 'response_subject', 'response_body')
+			));
             if (!empty($form['Form']['response_email'])) {
               $this->autoRespond($form, $data);
             }
@@ -168,7 +169,8 @@ class Form extends FormsAppModel {
 	}
 
 /**
- * Send an auto response if configured 
+ * Send an auto response if configured
+ * @todo Make sure we are passing the FormInput.id via Form.response_email
  */
     public function autoRespond($form, $data) {
         $formInputWithEmail = $this->FormInput->find('first', array(

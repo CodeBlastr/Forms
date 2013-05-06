@@ -185,10 +185,18 @@ class FormsController extends FormsAppController {
 			$init = !empty($plugin) ? $plugin . '.' . $this->modelName : $this->modelName;
 			$this->Model = ClassRegistry::init($init);
 			// validates the data before trying to run the action
+			/** @note Possible that we don't really need to validate if $action is empty **/
 			if ($this->Model->saveAll($this->request->data[$this->modelName], array('validate' => 'only'))) {
 				try {
-					$result = $this->Model->$action($this->request->data);
-					if ($result && $this->Form->notify($this->request->data)) {
+					if ( empty($action) ) {
+						// empty $action means that we just want to use notify to send the form via email
+						// and running $model->$action is not needed
+						$result = true;
+					} else {
+						$result = $this->Model->$action($this->request->data);
+					}
+					
+					if ( $result && $this->Form->notify($this->request->data) ) {
 						if (!empty($this->request->data['Form']['success_message'])) {
 							$this->Session->setFlash($this->request->data['Form']['success_message'], true);
 						} else {

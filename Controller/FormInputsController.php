@@ -71,13 +71,12 @@ class FormInputsController extends FormsAppController {
 		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
 	}
 	
-	/**
-	 * @todo Need to check to see if this user is authorized to be adding inputs to this Form.id
-	 * @param type $formId
-	 */
+/**
+ * @todo Need to check to see if this user is authorized to be adding inputs to this Form.id
+ * @param type $formId
+ */
 	public function create($formId) {
 		if ( !empty($this->request->data['FormInput']) ) {
-//			debug($this->request->data);break;
 			// create the formInput
 			try {
 				foreach ( $this->request->data['FormInput'] as $formInput ) {
@@ -117,7 +116,7 @@ class FormInputsController extends FormsAppController {
 			}
 		}
 		
-		# variables needed for display of the view
+		// variables needed for display of the view
 		$this->request->data = $this->FormInput->read(null, $id);
 		$formFieldsets = $this->FormInput->FormFieldset->find('list');
 		$this->set(compact('formFieldsets'));

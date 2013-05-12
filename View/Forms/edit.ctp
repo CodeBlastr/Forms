@@ -23,7 +23,7 @@
 
 <div class="forms form">
     <h3><?php echo __('Form preview'); ?></h3>
-	<div class="preview formPreview"><?php echo $this->Element('forms', array('id' => $this->request->data['Form']['id'], 'preview' => true), array('plugin' => 'forms')); ?></div>
+	<div class="preview formPreview"><?php echo $this->Element('Forms.forms', array('id' => $this->request->data['Form']['id'], 'preview' => true)); ?></div>
 
 	<?php echo $this->Form->create('Form');?>
 	<fieldset>
@@ -125,7 +125,7 @@
 		echo $this->Form->input('FormInput.placeholder', array('placeholder' => 'Shows inside the input, and disappears on focus'));
 		echo $this->Form->input('FormInput.show_label', array('label' => 'Display the Label?', 'checked' => 'checked'));
 		echo $this->Form->input('FormInput.before', array('placeholder' => 'Shows before the input label', 'div' => array('class' => 'input text clear')));
-		echo $this->Form->input('FormInput.separator', array('placeholder' => 'Shows between the label and the input'));
+		echo $this->Form->input('FormInput.between', array('placeholder' => 'Shows between the label and the input'));
 		echo $this->Form->input('FormInput.after', array('placeholder' => 'Shows after the input'));
 		echo $this->Form->input('FormInput.div_id', array('type' => 'text', 'placeholder' => ' a custom id for the div around this input'));
 		echo $this->Form->input('FormInput.div_class', array('placeholder' => ' a custom class for the div around this input')); ?>

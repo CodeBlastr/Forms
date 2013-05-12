@@ -16,12 +16,17 @@ $label = $input['show_label'] == 1 ? $input['name'] : false;
 $before = !empty($preview) ? __('<span class="editFormSpan">%s</span> %s', $this->Html->link('Edit', array('plugin' => 'forms', 'controller' => 'forms', 'action' => 'edit', $input['form_id'], $input['id']), array('class' => 'editFormInput', 'title' => 'Edit')), $input['before']) : $input['before'];
 
 if(!empty($divClass) && !empty($divId)) {
-  $divOptions = array_merge($divId, $divClass);
+	$divOptions = array_merge($divId, $divClass);
 } else {
-  if(empty($divClass)) $divOptions = $divId;
-  elseif(empty ($divId)) $divOptions = $divClass;
+	if(empty($divClass)) {
+		$divOptions = $divId;
+	} elseif(empty ($divId)) {
+		$divOptions = $divClass;	
+	} 
 }
-if(empty($divOptions)) $divOptions = null;
+if(empty($divOptions)) {
+	$divOptions = null;
+}
 $isRequired = !empty($input['is_required']) ? 'required' : null;
 $validationType = !empty($input['validation']) ? $input['validation'] : null;
 # special field values
@@ -48,6 +53,7 @@ $options = array_merge(array(
 	'options' => $options,
 	'before' => $before,
 	'between' => $input['between'],
+	'separator' => $input['separator'],
 	'after' => $input['after'],
 	'minLength' => $input['min_length'],
 	'maxLength' => $input['max_length'],

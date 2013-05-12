@@ -28,8 +28,8 @@ class FormInput extends FormsAppModel {
 	public $validate = array(
 	    'code' => array(
 			'characterCheck' => array(
-		    	'rule' => '/^[a-z0-9_]{2,50}$/i',  
-		        'message' => 'Only lowercase letters, integers, underscores, and min 2 and 50 characters'
+		    	'rule' => '/^[a-z0-9_]{2,200}$/i',  
+		        'message' => 'Only lowercase letters, integers, underscores, and min 2 and 200 characters'
 				),
 			'firstCodeCheck' => array(
 				'rule' => array('_initialCodeCheck', 'is_duplicate'),

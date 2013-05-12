@@ -185,10 +185,10 @@ class FormsController extends FormsAppController {
 			$init = !empty($plugin) ? $plugin . '.' . $this->modelName : $this->modelName;
 			$this->Model = ClassRegistry::init($init);
 			// validates the data before trying to run the action
-			/** @note Possible that we don't really need to validate if $action is empty **/
+			// @note Possible that we don't really need to validate if $action is empty
 			if ($this->Model->saveAll($this->request->data[$this->modelName], array('validate' => 'only'))) {
 				try {
-					if ( empty($action) ) {
+					if (empty($action)) {
 						// empty $action means that we just want to use notify to send the form via email
 						// and running $model->$action is not needed
 						$result = true;
@@ -196,7 +196,7 @@ class FormsController extends FormsAppController {
 						$result = $this->Model->$action($this->request->data);
 					}
 					
-					if ( $result && $this->Form->notify($this->request->data) ) {
+					if ($result && $this->Form->notify($this->request->data)) {
 						if (!empty($this->request->data['Form']['success_message'])) {
 							$this->Session->setFlash($this->request->data['Form']['success_message'], true);
 						} else {
@@ -235,12 +235,12 @@ class FormsController extends FormsAppController {
 						$this->redirect($this->request->data['Form']['success_url']);
 					} else {
 						if (!empty($this->request->data['Form']['fail_url'])) {
-							# this makes the submitted form data accessible by sessions
+							// this makes the submitted form data accessible by sessions
 							$this->Session->setFlash($e->getMessage());
 							$this->redirect($this->request->data['Form']['fail_url']);
 						} else {
-							# this makes the submitted form data accessible by sessions
-							$this->Session->setFlash($e->getMessage() . $this->Model->validationErrors);
+							// this makes the submitted form data accessible by sessions
+							$this->Session->setFlash($e->getMessage() . ZuhaInflector::flatten($this->Model->validationErrors));
 							$this->redirect($this->referer());
 						}
 					}

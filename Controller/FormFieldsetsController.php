@@ -1,4 +1,5 @@
 <?php
+App::uses('FormsAppController', 'Forms.Controller');
 /**
  * Form Fieldsets Controller
  *

@@ -186,6 +186,14 @@ class FormsController extends FormsAppController {
 			$this->Model = ClassRegistry::init($init);
 			// validates the data before trying to run the action
 			// @note Possible that we don't really need to validate if $action is empty
+			if(isset($this->request->data['FormAnswer'])) {
+				foreach($this->request->data['FormAnswer'] as $k => $v) {
+					if(is_array($v)) {
+						$this->request->data['FormAnswer'][$k] = implode(' / ', $v);
+					}
+				}
+			}
+			
 			if ($this->Model->saveAll($this->request->data[$this->modelName], array('validate' => 'only'))) {
 				try {
 					if (empty($action)) {

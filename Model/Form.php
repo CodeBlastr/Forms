@@ -150,7 +150,7 @@ class Form extends FormsAppModel {
 				'fields' => array('response_email', 'notifiees', 'response_subject', 'response_body')
 			));
             if (!empty($form['Form']['response_email'])) {
-              $this->autoRespond($form, $data);
+            	$this->autoRespond($form, $data);
             }
 
 			if (!empty($form['Form']['notifiees'])) {

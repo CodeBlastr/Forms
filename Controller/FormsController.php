@@ -123,7 +123,7 @@ class FormsController extends FormsAppController {
 			$this->Form->copy($id);
 			$this->redirect(array('action' => 'index'));
 		} catch (Exception $e) {
-			debug($e->getMessage);
+			debug($e->getMessage());
 			break;
 		}
 	}
@@ -302,10 +302,10 @@ class FormsController extends FormsAppController {
  		if (!empty($this->request->data['FormKey']['id'])) {
  			App::uses('FormKey', 'Forms.Model');
 			$FormKey = new FormKey();
- 			if ($success = $FormKey->testKey($this->request->data)) {
- 				return $success;
- 			} else {
-				echo 'uncaught exception : 8638678967189768976123894';
+ 			try {
+ 				return $FormKey->testKey($this->request->data);
+ 			} catch (Exception $e) {
+ 				debug($e->getMessage());
 				break; 				
  			}
  		}	

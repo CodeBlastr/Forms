@@ -258,7 +258,7 @@ class FormsController extends FormsAppController {
 			}
 		} else {
 			echo 'uncaught exception : 1238740918723409723489';
-			break;
+			exit;
 		}
 	}
 

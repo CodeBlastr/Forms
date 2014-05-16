@@ -258,7 +258,7 @@ class FormsController extends FormsAppController {
 			}
 		} else {
 			echo 'uncaught exception : 1238740918723409723489';
-			break;
+			exit;
 		}
 	}
 
@@ -279,6 +279,10 @@ class FormsController extends FormsAppController {
  * </script>
  */
  	protected function _checkSecurity() {
+ 		if (empty($this->request->data['FormKey']['key']) && empty($this->request->data['FormKey']['id'])) {
+ 			throw new Exception(__('Your submission has been deemed spam.  If you have received this message in error, please try again.'));
+ 		}
+
  		// defined key test
         if (defined('__FORMS_KEYS') && !empty($this->request->data['FormKey']['key'])) {
             $success = false;

@@ -13,7 +13,7 @@
  * Must retain the above copyright notice and release modifications publicly.
  *
  * @copyright     Copyright 2009-2012, Zuha Foundation Inc. (http://zuha.com)
- * @link          http://zuha.com Zuha™ Project
+ * @link          http://zuha.com Zuhaï¿½ Project
  * @package       zuha
  * @subpackage    zuha.app.plugins.forms.views
  * @since         Zuha(tm) v 0.0.1
@@ -57,8 +57,6 @@ foreach ($forms as $group):
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $group['Form']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $group['Form']['id'])); ?>
 			<?php echo $this->Html->link(__('Copy'), array('action' => 'copy', $group['Form']['id'])); ?>
-			<?php echo $this->Html->link(__('Add Fieldset'), array('controller' => 'form_fieldsets', 'action' => 'add', $group['Form']['id'])); ?>
-			<?php echo $this->Html->link(__('View Fieldsets', true), array('controller' => 'form_fieldsets', 'action' => 'index', $group['Form']['id'])); ?>
 			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $group['Form']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $group['Form']['id'])); ?>
 		</td>
 	</tr>

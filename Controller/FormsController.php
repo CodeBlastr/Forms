@@ -354,4 +354,20 @@ class FormsController extends FormsAppController {
 		}
 	}
 
+/**
+ * Delete method
+ * 
+ * @param uuid
+ */
+	public function delete($id = null) {
+		if (!$id) {
+			$this->Session->setFlash(__('Invalid id for Form'));
+			$this->redirect(array('action'=>'index'));
+		}
+		if ($this->Form->delete($id)) {
+			$this->Session->setFlash(__('Form deleted'));
+			$this->redirect(array('action'=>'index'));
+		}
+	}
+
 }

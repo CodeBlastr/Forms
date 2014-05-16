@@ -24,13 +24,16 @@
 
 <div class="forms add-form">
 	<h1><?php echo __('Create a Form'); ?></h1>
-	<?php echo $this->Form->create('Form'); ?>
+	<?php echo $this->Form->create('Form', array('id' => 'FormSelect')); ?>
 	<fieldset>
 		<legend><?php echo __('What type of form?'); ?></legend>
 		<?php
 		echo $this->Form->input('Form.copy', array('label' => false, 'empty' => '--Select--'));
 		?>
     </fieldset>
+	<?php echo $this->Form->end('Submit'); ?>
+	
+	<?php echo $this->Form->create('Form'); ?>
 	<fieldset>
 		<legend><?php echo __('Add Form'); ?></legend>
 		<?php
@@ -51,8 +54,8 @@
 		echo $this->Form->input('Form.fail_url');
 		echo $this->Form->input('Form.notifiees', array('type' => 'text', 'label' => 'Email(s) to notify of submissions', 'placeholder' => 'Separate emails by commas'));
 		?>
+		<?php echo $this->Form->end('Submit'); ?>
 	</fieldset>
-	<?php echo $this->Form->end('Submit'); ?>
 </div>
 <?php
 // set the contextual menu items
@@ -92,12 +95,14 @@ $this->set('context_menu', array('menus' => array(
 	function formType() {
 		$("#FormName").parent().parent().hide();
 		$("#FormMethod").parent().parent().hide();
+		$("#FormSelect .submit").show();
 
 		var val = $("#FormCopy").val();
 
 		if (val === "custom") {
 			$("#FormName").parent().parent().show();
 			$("#FormMethod").parent().parent().show();
+			$("#FormSelect .submit").hide();
 		}
 	}
 

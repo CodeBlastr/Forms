@@ -124,7 +124,11 @@ class FormInputsController extends FormsAppController {
 		$this->set('systemDefaultValues', $this->FormInput->systemDefaultValues());
 	}
 
-
+/**
+ * Delete method
+ * 
+ * @param uuid
+ */
 	public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Form Input', true));

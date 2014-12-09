@@ -197,3 +197,12 @@ $("#addForm").validate({
 	}
 })
 </script>
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		setTimeout(function() {
+			$.getJSON('/forms/forms/secure.json', function(data) {
+				$('#addForm').append('<input type=\"hidden\" name=\"data[FormKey][id]\" value=\"' + data['key'] + '">');
+			});			
+		}, 2000);
+	});
+</script>

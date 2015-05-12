@@ -310,7 +310,7 @@ class FormsController extends FormsAppController {
  				return $FormKey->testKey($this->request->data);
  			} catch (Exception $e) {
  				debug($e->getMessage());
-				break; 				
+				exit; 				
  			}
  		}	
 		
